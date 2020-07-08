@@ -118,7 +118,8 @@ profile-clean:
 	mkdir -p profile
 
 check: profile-clean ## run tests using the library test runner
-	./venv scheme --program src/arew.scm test src/
+	./venv scheme --program src/arew.scm check src/check-check.scm
+	./venv scheme --program src/arew.scm check src/
 
 todo: ## Things that should be done
 	@grep -nR --color=always TODO src/

@@ -106,6 +106,11 @@
    ((annotation? obj) (annotations->datum (annotation-expression obj)))
    (else obj)))
 
+(define (primitive-import? name)
+  (case (car name)
+    ((chezscheme rnrs) #t)
+    (else #f)))
+
 (define (pack filename-or-obj)
 
   (define (maybe-annotation-expression obj)
@@ -165,11 +170,6 @@
             (error "Library not found" name)
             (guard (ex (else (loop (cdr extensions))))
               (find-file (string-append name* (car extensions))))))))
-
-  (define (primitive-import? name)
-    (case (car name)
-      ((chezscheme rnrs) #t)
-      (else #f)))
 
   (define (read-program sexp)
     (let loop ((imports '())
@@ -262,7 +262,40 @@
   (let ((env (copy-environment (environment '(prefix (arew r7rs) $)))))
     (pretty-print (expand (pack filename) env))))
 
-(define (test-one filename)
+(define (check path)
+
+  (define (string-suffix? string suffix)
+    (let loop ((path (reverse (string->list string)))
+               (suffix (reverse (string->list suffix))))
+      (if (null? suffix)
+          (if (null? path)
+              #t
+              (if (char=? (car path) #\/)
+                  #f
+                  #t))
+          (if (char=? (car path) (car suffix))
+              (loop (cdr path) (cdr suffix))
+              #f))))
+
+  (define (path-join path item)
+    (if (string-suffix? path "/")
+        (string-append path item)
+        (string-append path "/" item)))
+
+  (define (discover path)
+    (let loop ((paths (list path))
+               (out '()))
+      (if (null? paths)
+          out
+          (let ((path (car paths)))
+            (if (file-directory? path)
+                (loop (append (cdr paths)
+                              (map (lambda (item) (path-join path item))
+                                   (directory-list path)))
+                      out)
+                (if (string-suffix? path "check.scm")
+                    (loop (cdr paths) (cons path out))
+                    (loop (cdr paths) out)))))))
 
   (define (read-filename filename)
     (define port (open-file-input-port filename))
@@ -296,76 +329,80 @@
                 ((import) (loop (cdr body) exports (append (cdr head) imports)))
                 (else (values exports imports body))))))))
 
-  (define (make-program library test)
-    `((import ,library) (,test)))
+  (define (path->library-name path)
+    (cadr (annotations->datum (car (read-filename path)))))
 
-  (define (run-one library test)
-    (display "** ")
-    (display test)
-    (newline)
-    ;; execute the program
-    (eval* (make-program library test)))
+  (define (import->name spec)
+    (let ((spec (annotations->datum spec)))
+      (case (car spec)
+        ((rename only prefix except for) (import->name (cadr spec)))
+        (else spec))))
 
-  (define (format-output library out tests)
-    (let ((error? #f))
-      (let ((out (map cons out tests)))
-        (let loop ((out out))
-          (unless (null? out)
-            (unless (caaar out)
-              (display library)
-              (display " ")
-              (display (cdar out))
-              (display ": failed")
-              (newline)
-              (set! error? #t)))))
-      error?))
+  (define (library-imports name)
+    (if (primitive-import? name)
+        '()
+        (call-with-values (lambda () (read-library name))
+          (lambda (exports imports body)
+            (map import->name imports)))))
 
-  (display "* Testing: ")
-  (display filename)
-  (newline)
+  (define (library-exports name)
+    (if (primitive-import? name)
+        '()
+        (call-with-values (lambda () (read-library name))
+          (lambda (exports imports body) (map annotation-expression exports)))))
 
-  (let* ((name (cadr (annotations->datum (car (read-filename filename))))))
-    (call-with-values (lambda () (read-library name))
-      (lambda (exports _0 _1)
-        (let ((exports (annotations->datum exports)))
-          (parameterize ([compile-profile 'source])
-            (let ((error? (format-output exports
-                                         (map-in-order (lambda (test) (run-one name test))
-                                                       exports)
-                                         exports)))
-              (profile-dump-html "profile/")
-              (when error?
-                (exit 1)))))))))
+  (define (make-dependencies imports)
+    (let loop ((imports imports)
+               (out '()))
+      (if (null? imports)
+          out
+          (if (assoc (car imports) out)
+              (loop (cdr imports) out)
+              (let ((imports* (library-imports (car imports))))
+                (loop (append (cdr imports) imports*)
+                      (cons (cons (car imports) imports*)
+                            out)))))))
 
-(define (test path)
+  (define (make-check-program libraries)
 
-  (define (test-library? path)
-    (let loop ((path (reverse (string->list path)))
-               (suffix (reverse (string->list "tests.scm"))))
-      (if (null? suffix)
-          (if (null? path)
-              #t
-              (if (char=? (car path) #\/)
-                  #f
-                  #t))
-          (if (char=? (car path) (car suffix))
-              (loop (cdr path) (cdr suffix))
-              #f))))
+    (define (make-library/prefix name index)
+      (cons name (string->symbol (string-append "checks-" (number->string index) ":"))))
 
-  (let loop ((paths (list path)))
-    (unless (null? paths)
-      (let ((path (car paths)))
-        (if (file-directory? path)
-            (loop (append (cdr paths) (map (lambda (item) (string-append path "/" item)) (directory-list path))))
-            (begin
-              (when (test-library? path)
-                (test-one path))
-              (loop (cdr paths))))))))
+    (define libraries/prefix (map make-library/prefix libraries (iota (length libraries))))
+
+    (define (symbol-append a b)
+      (string->symbol (string-append (symbol->string a) (symbol->string b))))
+
+    (define (magic library/prefix)
+      (let ((checks (library-exports (car library/prefix))))
+        (map (lambda (check) `(run-check ',(car library/prefix)
+                                         ',check
+                                         ,(symbol-append (cdr library/prefix) check)))
+             checks)))
+
+    `((import (check))
+      ,@(map (lambda (library/prefix) `(import (prefix ,(car library/prefix) ,(cdr library/prefix)))) libraries/prefix)
+
+      ,@(append-map magic libraries/prefix)))
+
+  (define names (map path->library-name (discover path)))
+
+  (define dependencies (make-dependencies names))
+
+  (define sorted (topological-sort dependencies))
+
+  (define sorted-check-libraries (filter (lambda (x) (find (lambda (y) (equal? x y)) names))
+                                          sorted))
+
+  (unless (null? sorted-check-libraries)
+    (parameterize ([compile-profile 'source])
+      (eval* (make-check-program sorted-check-libraries))
+      (profile-dump-html "profile/"))))
 
 (match (cdr (command-line))
 ;;  (("editor" filename) (editor filename))
   (("eval" filename) (eval* filename))
   (("expand" filename) (expand* filename))
   (("print" filename) (print filename))
-  (("test" filename) (test filename))
+  (("check" filename) (check filename))
   (else (display "unknown subcommand.\n")))
