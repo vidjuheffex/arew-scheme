@@ -268,11 +268,7 @@
     (let loop ((path (reverse (string->list string)))
                (suffix (reverse (string->list suffix))))
       (if (null? suffix)
-          (if (null? path)
-              #t
-              (if (char=? (car path) #\/)
-                  #f
-                  #t))
+          #t
           (if (char=? (car path) (car suffix))
               (loop (cdr path) (cdr suffix))
               #f))))
@@ -394,9 +390,14 @@
   (define sorted-check-libraries (filter (lambda (x) (find (lambda (y) (equal? x y)) names))
                                           sorted))
 
+  (define sorted-check-libraries* (remove (lambda (x) (equal? x '(check)))
+                                          sorted-check-libraries))
+
+  (define program (make-check-program sorted-check-libraries*))
+
   (unless (null? sorted-check-libraries)
     (parameterize ([compile-profile 'source])
-      (eval* (make-check-program sorted-check-libraries))
+      (eval* program)
       (profile-dump-html "profile/"))))
 
 (match (cdr (command-line))
