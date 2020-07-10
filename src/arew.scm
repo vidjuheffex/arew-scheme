@@ -395,7 +395,7 @@
 
   (define program (make-check-program sorted-check-libraries*))
 
-  (unless (null? sorted-check-libraries)
+  (unless (null? sorted-check-libraries*)
     (parameterize ([compile-profile 'source])
       (eval* program)
       (profile-dump-html "profile/"))))
