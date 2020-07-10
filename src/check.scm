@@ -1,8 +1,8 @@
 (library (check)
-  (export test check-raise check-skip run-check)
+  (export check check-raise check-skip run-check)
 
   (import (chezscheme))
-  (import (only (scheme base) pk))
+  (import (only (scheme base)  pk))
 
   (begin
 
@@ -13,17 +13,17 @@
            (syntax-rules ()
              ((keyword args ...) body))))))
 
-    (define-syntax test
+    (define-syntax check
       (syntax-rules ()
-        ((test predicate? expected actual)
+        ((check predicate? expected actual)
          (lambda ()
            (let ((expected* expected)
                  (actual* actual))
              (if (predicate? expected* actual*)
                  (vector #t)
                  (vector #f 'unexpected-value expected* actual*)))))
-        ((test expected actual)
-         (test equal? expected actual))))
+        ((check expected actual)
+         (check equal? expected actual))))
 
     (define-syntax-rule (check-raise predicate? actual)
       (lambda ()
@@ -42,13 +42,13 @@
     (define-syntax-rule (run-check library-name check-name check)
       (begin
         (guard (obj (else (pk (vector #f 'error obj))))
+          (display "** ")
+          (display 'library-name)
+          (display " ")
+          (display 'check-name)
+          (newline)
           (let ((out (check)))
             (when (not (vector-ref out 0))
-              (display "** ")
-              (display 'library-name)
-              (display " ")
-              (display 'check-name)
-              (newline)
               (display out)
               (newline)
               (exit 1))))))))

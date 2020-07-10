@@ -41,677 +41,677 @@ check-238 check-239 check-240 check-241 check-242 check-243)
           (srfi srfi-151))
 
   (define check-001
-    (test -1 (bitwise-not 0)))
+    (check -1 (bitwise-not 0)))
 
   (define check-002
-    (test 0 (bitwise-not -1)))
+    (check 0 (bitwise-not -1)))
 
   (define check-003
-    (test -11 (bitwise-not 10)))
+    (check -11 (bitwise-not 10)))
 
   (define check-004
-    (test 36 (bitwise-not -37)))
+    (check 36 (bitwise-not -37)))
 
   (define check-005
-    (test 0 (bitwise-and #b0 #b1)))
+    (check 0 (bitwise-and #b0 #b1)))
 
   (define check-006
-    (test 1680869008 (bitwise-and -193073517 1689392892)))
+    (check 1680869008 (bitwise-and -193073517 1689392892)))
 
   (define check-007
-    (test 3769478 (bitwise-and 1694076839 -4290775858)))
+    (check 3769478 (bitwise-and 1694076839 -4290775858)))
 
   (define check-008
-    (test 6 (bitwise-and 14 6)))
+    (check 6 (bitwise-and 14 6)))
 
   (define check-009
-    (test 10 (bitwise-and 11 26)))
+    (check 10 (bitwise-and 11 26)))
 
   (define check-010
-    (test 4 (bitwise-and 37 12)))
+    (check 4 (bitwise-and 37 12)))
 
   (define check-011
-    (test 1 (bitwise-and #b1 #b1)))
+    (check 1 (bitwise-and #b1 #b1)))
 
   (define check-012
-    (test 0 (bitwise-and #b1 #b10)))
+    (check 0 (bitwise-and #b1 #b10)))
 
   (define check-013
-    (test #b10 (bitwise-and #b11 #b10)))
+    (check #b10 (bitwise-and #b11 #b10)))
 
   (define check-014
-    (test #b101 (bitwise-and #b101 #b111)))
+    (check #b101 (bitwise-and #b101 #b111)))
 
   (define check-015
-    (test #b111 (bitwise-and -1 #b111)))
+    (check #b111 (bitwise-and -1 #b111)))
 
   (define check-016
-    (test #b110 (bitwise-and -2 #b111)))
+    (check #b110 (bitwise-and -2 #b111)))
 
   (define check-017
-    (test 3769478 (bitwise-and -4290775858 1694076839)))
+    (check 3769478 (bitwise-and -4290775858 1694076839)))
 
   (define check-018
-    (test -4294967295 (bitwise-ior 1 (- -1 #xffffffff))))
+    (check -4294967295 (bitwise-ior 1 (- -1 #xffffffff))))
 
   (define check-019
-    (test -18446744073709551615 (bitwise-ior 1 (- -1 #xffffffffffffffff))))
+    (check -18446744073709551615 (bitwise-ior 1 (- -1 #xffffffffffffffff))))
 
   (define check-020
-    (test 14 (bitwise-ior 10 12)))
+    (check 14 (bitwise-ior 10 12)))
 
   (define check-021
-    (test 11 (bitwise-ior 3  10)))
+    (check 11 (bitwise-ior 3  10)))
 
   (define check-022
-    (test -4294967126 (bitwise-xor #b10101010 (- -1 #xffffffff))))
+    (check -4294967126 (bitwise-xor #b10101010 (- -1 #xffffffff))))
 
   (define check-023
-    (test -18446744073709551446 (bitwise-xor #b10101010 (- -1 #xffffffffffffffff))))
+    (check -18446744073709551446 (bitwise-xor #b10101010 (- -1 #xffffffffffffffff))))
 
   (define check-024
-    (test -2600468497 (bitwise-ior 1694076839 -4290775858)))
+    (check -2600468497 (bitwise-ior 1694076839 -4290775858)))
 
   (define check-025
-    (test -184549633 (bitwise-ior -193073517 1689392892)))
+    (check -184549633 (bitwise-ior -193073517 1689392892)))
 
   (define check-026
-    (test -2604237975 (bitwise-xor 1694076839 -4290775858)))
+    (check -2604237975 (bitwise-xor 1694076839 -4290775858)))
 
   (define check-027
-    (test -1865418641 (bitwise-xor -193073517 1689392892)))
+    (check -1865418641 (bitwise-xor -193073517 1689392892)))
 
   (define check-028
-    (test 6 (bitwise-xor 10 12)))
+    (check 6 (bitwise-xor 10 12)))
 
   (define check-029
-    (test 9 (bitwise-xor 3 10)))
+    (check 9 (bitwise-xor 3 10)))
 
   (define check-030
-    (test (bitwise-not -4294967126) (bitwise-eqv #b10101010 (- -1 #xffffffff))))
+    (check (bitwise-not -4294967126) (bitwise-eqv #b10101010 (- -1 #xffffffff))))
 
   (define check-031
-    (test -42 (bitwise-eqv 37 12)))
+    (check -42 (bitwise-eqv 37 12)))
 
   (define check-032
-    (test -1 (bitwise-nand 0 0)))
+    (check -1 (bitwise-nand 0 0)))
 
   (define check-033
-    (test -1 (bitwise-nand 0 -1)))
+    (check -1 (bitwise-nand 0 -1)))
 
   (define check-034
-    (test -124 (bitwise-nand -1 123)))
+    (check -124 (bitwise-nand -1 123)))
 
   (define check-035
-    (test -11 (bitwise-nand 11 26)))
+    (check -11 (bitwise-nand 11 26)))
 
   (define check-036
-    (test -28 (bitwise-nor  11 26)))
+    (check -28 (bitwise-nor  11 26)))
 
   (define check-037
-    (test 0 (bitwise-nor -1 123)))
+    (check 0 (bitwise-nor -1 123)))
 
   (define check-038
-    (test 16 (bitwise-andc1 11 26)))
+    (check 16 (bitwise-andc1 11 26)))
 
   (define check-039
-    (test 1 (bitwise-andc2 11 26)))
+    (check 1 (bitwise-andc2 11 26)))
 
   (define check-040
-    (test -2 (bitwise-orc1 11 26)))
+    (check -2 (bitwise-orc1 11 26)))
 
   (define check-041
-    (test -1 (bitwise-nor 0 0)))
+    (check -1 (bitwise-nor 0 0)))
 
   (define check-042
-    (test 0 (bitwise-nor 0 -1)))
+    (check 0 (bitwise-nor 0 -1)))
 
   (define check-043
-    (test 0 (bitwise-andc1 0 0)))
+    (check 0 (bitwise-andc1 0 0)))
 
   (define check-044
-    (test -1 (bitwise-andc1 0 -1)))
+    (check -1 (bitwise-andc1 0 -1)))
 
   (define check-045
-    (test 123 (bitwise-andc1 0 123)))
+    (check 123 (bitwise-andc1 0 123)))
 
   (define check-046
-    (test 0 (bitwise-andc2 0 0)))
+    (check 0 (bitwise-andc2 0 0)))
 
   (define check-047
-    (test -1 (bitwise-andc2 -1 0)))
+    (check -1 (bitwise-andc2 -1 0)))
 
   (define check-048
-    (test -1 (bitwise-orc1 0 0)))
+    (check -1 (bitwise-orc1 0 0)))
 
   (define check-049
-    (test -1 (bitwise-orc1 0 -1)))
+    (check -1 (bitwise-orc1 0 -1)))
 
   (define check-050
-    (test 0 (bitwise-orc1 -1 0)))
+    (check 0 (bitwise-orc1 -1 0)))
 
   (define check-051
-    (test -124 (bitwise-orc1 123 0)))
+    (check -124 (bitwise-orc1 123 0)))
 
   (define check-052
-    (test -1 (bitwise-orc2 0 0)))
+    (check -1 (bitwise-orc2 0 0)))
 
   (define check-053
-    (test -1 (bitwise-orc2 -1 0)))
+    (check -1 (bitwise-orc2 -1 0)))
 
   (define check-054
-    (test 0 (bitwise-orc2 0 -1)))
+    (check 0 (bitwise-orc2 0 -1)))
 
   (define check-055
-    (test -124 (bitwise-orc2 0 123)))
+    (check -124 (bitwise-orc2 0 123)))
 
   ;; bitwise/integer
 
   (define check-056
-    (test #x1000000000000000100000000000000000000000000000000
+    (check #x1000000000000000100000000000000000000000000000000
           (arithmetic-shift #x100000000000000010000000000000000 64)))
 
   (define check-057
-    (test #x8e73b0f7da0e6452c810f32b809079e5
+    (check #x8e73b0f7da0e6452c810f32b809079e5
           (arithmetic-shift #x8e73b0f7da0e6452c810f32b809079e562f8ead2522c6b7b -64)))
 
   (define check-058
-    (test 2 (arithmetic-shift 1 1)))
+    (check 2 (arithmetic-shift 1 1)))
 
   (define check-059
-    (test 0 (arithmetic-shift 1 -1)))
+    (check 0 (arithmetic-shift 1 -1)))
 
   (define check-060
-    (test 1 (arithmetic-shift 1 0)))
+    (check 1 (arithmetic-shift 1 0)))
 
   (define check-061
-    (test 4 (arithmetic-shift 1 2)))
+    (check 4 (arithmetic-shift 1 2)))
 
   (define check-062
-    (test 8 (arithmetic-shift 1 3)))
+    (check 8 (arithmetic-shift 1 3)))
 
   (define check-063
-    (test 16 (arithmetic-shift 1 4)))
+    (check 16 (arithmetic-shift 1 4)))
 
   (define check-064
-    (test (expt 2 31) (arithmetic-shift 1 31)))
+    (check (expt 2 31) (arithmetic-shift 1 31)))
 
   (define check-065
-    (test (expt 2 32) (arithmetic-shift 1 32)))
+    (check (expt 2 32) (arithmetic-shift 1 32)))
 
   (define check-066
-    (test (expt 2 33) (arithmetic-shift 1 33)))
+    (check (expt 2 33) (arithmetic-shift 1 33)))
 
   (define check-067
-    (test (expt 2 63) (arithmetic-shift 1 63)))
+    (check (expt 2 63) (arithmetic-shift 1 63)))
 
   (define check-068
-    (test (expt 2 64) (arithmetic-shift 1 64)))
+    (check (expt 2 64) (arithmetic-shift 1 64)))
 
   (define check-069
-    (test (expt 2 65) (arithmetic-shift 1 65)))
+    (check (expt 2 65) (arithmetic-shift 1 65)))
 
   (define check-070
-    (test (expt 2 127) (arithmetic-shift 1 127)))
+    (check (expt 2 127) (arithmetic-shift 1 127)))
 
   (define check-071
-    (test (expt 2 128) (arithmetic-shift 1 128)))
+    (check (expt 2 128) (arithmetic-shift 1 128)))
 
   (define check-072
-    (test (expt 2 129) (arithmetic-shift 1 129)))
+    (check (expt 2 129) (arithmetic-shift 1 129)))
 
   (define check-073
-    (test 3028397001194014464 (arithmetic-shift 11829675785914119 8)))
+    (check 3028397001194014464 (arithmetic-shift 11829675785914119 8)))
 
   (define check-074
-    (test -1 (arithmetic-shift -1 0)))
+    (check -1 (arithmetic-shift -1 0)))
 
   (define check-075
-    (test -2 (arithmetic-shift -1 1)))
+    (check -2 (arithmetic-shift -1 1)))
 
   (define check-076
-    (test -4 (arithmetic-shift -1 2)))
+    (check -4 (arithmetic-shift -1 2)))
 
   (define check-077
-    (test -8 (arithmetic-shift -1 3)))
+    (check -8 (arithmetic-shift -1 3)))
 
   (define check-078
-    (test -16 (arithmetic-shift -1 4)))
+    (check -16 (arithmetic-shift -1 4)))
 
   (define check-079
-    (test (- (expt 2 31)) (arithmetic-shift -1 31)))
+    (check (- (expt 2 31)) (arithmetic-shift -1 31)))
 
   (define check-080
-    (test (- (expt 2 32)) (arithmetic-shift -1 32)))
+    (check (- (expt 2 32)) (arithmetic-shift -1 32)))
 
   (define check-081
-    (test (- (expt 2 33)) (arithmetic-shift -1 33)))
+    (check (- (expt 2 33)) (arithmetic-shift -1 33)))
 
   (define check-082
-    (test (- (expt 2 63)) (arithmetic-shift -1 63)))
+    (check (- (expt 2 63)) (arithmetic-shift -1 63)))
 
   (define check-083
-    (test (- (expt 2 64)) (arithmetic-shift -1 64)))
+    (check (- (expt 2 64)) (arithmetic-shift -1 64)))
 
   (define check-084
-    (test (- (expt 2 65)) (arithmetic-shift -1 65)))
+    (check (- (expt 2 65)) (arithmetic-shift -1 65)))
 
   (define check-085
-    (test (- (expt 2 127)) (arithmetic-shift -1 127)))
+    (check (- (expt 2 127)) (arithmetic-shift -1 127)))
 
   (define check-086
-    (test (- (expt 2 128)) (arithmetic-shift -1 128)))
+    (check (- (expt 2 128)) (arithmetic-shift -1 128)))
 
   (define check-087
-    (test (- (expt 2 129)) (arithmetic-shift -1 129)))
+    (check (- (expt 2 129)) (arithmetic-shift -1 129)))
 
   (define check-088
-    (test 0 (arithmetic-shift 1 -63)))
+    (check 0 (arithmetic-shift 1 -63)))
 
   (define check-089
-    (test 0 (arithmetic-shift 1 -64)))
+    (check 0 (arithmetic-shift 1 -64)))
 
   (define check-090
-    (test 0 (arithmetic-shift 1 -65)))
+    (check 0 (arithmetic-shift 1 -65)))
 
   (define check-091
-    (test 32 (arithmetic-shift 8 2)))
+    (check 32 (arithmetic-shift 8 2)))
 
   (define check-092
-    (test 4 (arithmetic-shift 4 0)))
+    (check 4 (arithmetic-shift 4 0)))
 
   (define check-093
-    (test 4 (arithmetic-shift 8 -1)))
+    (check 4 (arithmetic-shift 8 -1)))
 
   (define check-094
-    (test -79 (arithmetic-shift -100000000000000000000000000000000 -100)))
+    (check -79 (arithmetic-shift -100000000000000000000000000000000 -100)))
 
   (define check-095
-    (test 2 (bit-count 12)))
+    (check 2 (bit-count 12)))
 
   (define check-096
-    (test 0 (integer-length  0)))
+    (check 0 (integer-length  0)))
 
   (define check-097
-    (test 1 (integer-length  1)))
+    (check 1 (integer-length  1)))
 
   (define check-098
-    (test 0 (integer-length -1)))
+    (check 0 (integer-length -1)))
 
   (define check-099
-    (test 3 (integer-length  7)))
+    (check 3 (integer-length  7)))
 
   (define check-100
-    (test 3 (integer-length -7)))
+    (check 3 (integer-length -7)))
 
   (define check-101
-    (test 4 (integer-length  8)))
+    (check 4 (integer-length  8)))
 
   (define check-102
-    (test 3 (integer-length -8)))
+    (check 3 (integer-length -8)))
 
   (define check-103
-    (test 9 (bitwise-if 3 1 8)))
+    (check 9 (bitwise-if 3 1 8)))
 
   (define check-104
-    (test 0 (bitwise-if 3 8 1)))
+    (check 0 (bitwise-if 3 8 1)))
 
   (define check-105
-    (test 3 (bitwise-if 1 1 2)))
+    (check 3 (bitwise-if 1 1 2)))
 
   (define check-106
-    (test #b00110011 (bitwise-if #b00111100 #b11110000 #b00001111)))
+    (check #b00110011 (bitwise-if #b00111100 #b11110000 #b00001111)))
 
   ;; bitwise/single
 
   (define check-107
-    (test #t (bit-set? 0 1)))
+    (check #t (bit-set? 0 1)))
 
   (define check-108
-    (test #f (bit-set? 1 1)))
+    (check #f (bit-set? 1 1)))
 
   (define check-109
-    (test #f (bit-set? 1 8)))
+    (check #f (bit-set? 1 8)))
 
   (define check-110
-    (test #t (bit-set? 10000 -1)))
+    (check #t (bit-set? 10000 -1)))
 
   (define check-111
-    (test #t (bit-set? 1000 -1)))
+    (check #t (bit-set? 1000 -1)))
 
   (define check-112
-    (test #t (bit-set? 64 #x10000000000000000)))
+    (check #t (bit-set? 64 #x10000000000000000)))
 
   (define check-113
-    (test #f (bit-set? 64 1)))
+    (check #f (bit-set? 64 1)))
 
   (define check-114
-    (test #t (bit-set? 3 10)))
+    (check #t (bit-set? 3 10)))
 
   (define check-115
-    (test #t (bit-set? 2 6)))
+    (check #t (bit-set? 2 6)))
 
   (define check-116
-    (test #f (bit-set? 0 6)))
+    (check #f (bit-set? 0 6)))
 
   (define check-117
-    (test 0 (copy-bit 0 0 #f)))
+    (check 0 (copy-bit 0 0 #f)))
 
   (define check-118
-    (test 0 (copy-bit 30 0 #f)))
+    (check 0 (copy-bit 30 0 #f)))
 
   (define check-119
-    (test 0 (copy-bit 31 0 #f)))
+    (check 0 (copy-bit 31 0 #f)))
 
   (define check-120
-    (test 0 (copy-bit 62 0 #f)))
+    (check 0 (copy-bit 62 0 #f)))
 
   (define check-121
-    (test 0 (copy-bit 63 0 #f)))
+    (check 0 (copy-bit 63 0 #f)))
 
   (define check-122
-    (test 0 (copy-bit 128 0 #f)))
+    (check 0 (copy-bit 128 0 #f)))
 
   (define check-123
-    (test -1 (copy-bit 0 -1 #t)))
+    (check -1 (copy-bit 0 -1 #t)))
 
   (define check-124
-    (test -1 (copy-bit 30 -1 #t)))
+    (check -1 (copy-bit 30 -1 #t)))
 
   (define check-125
-    (test -1 (copy-bit 31 -1 #t)))
+    (check -1 (copy-bit 31 -1 #t)))
 
   (define check-126
-    (test -1 (copy-bit 62 -1 #t)))
+    (check -1 (copy-bit 62 -1 #t)))
 
   (define check-127
-    (test -1 (copy-bit 63 -1 #t)))
+    (check -1 (copy-bit 63 -1 #t)))
 
   (define check-128
-    (test -1 (copy-bit 128 -1 #t)))
+    (check -1 (copy-bit 128 -1 #t)))
 
   (define check-129
-    (test 1 (copy-bit 0 0 #t)))
+    (check 1 (copy-bit 0 0 #t)))
 
   (define check-130
-    (test #x106 (copy-bit 8 6 #t)))
+    (check #x106 (copy-bit 8 6 #t)))
 
   (define check-131
-    (test 6 (copy-bit 8 6 #f)))
+    (check 6 (copy-bit 8 6 #f)))
 
   (define check-132
-    (test -2 (copy-bit 0 -1 #f)))
+    (check -2 (copy-bit 0 -1 #f)))
 
   (define check-133
-    (test 0 (copy-bit 128 #x100000000000000000000000000000000 #f)))
+    (check 0 (copy-bit 128 #x100000000000000000000000000000000 #f)))
 
   (define check-134
-    (test #x100000000000000000000000000000000
+    (check #x100000000000000000000000000000000
 	  (copy-bit 128 #x100000000000000000000000000000000 #t)))
 
   (define check-135
-    (test #x100000000000000000000000000000000
+    (check #x100000000000000000000000000000000
 	  (copy-bit 64 #x100000000000000000000000000000000 #f)))
 
   (define check-136
-    (test #x-100000000000000000000000000000000
+    (check #x-100000000000000000000000000000000
 	  (copy-bit 64 #x-100000000000000000000000000000000 #f)))
 
   (define check-137
-    (test #x-100000000000000000000000000000000
+    (check #x-100000000000000000000000000000000
 	  (copy-bit 256 #x-100000000000000000000000000000000 #t)))
 
   (define check-138
-    (test #b100 (copy-bit 2 0 #t)))
+    (check #b100 (copy-bit 2 0 #t)))
 
   (define check-139
-    (test #b1011 (copy-bit 2 #b1111 #f)))
+    (check #b1011 (copy-bit 2 #b1111 #f)))
 
   (define check-140
-    (test #b1 (copy-bit 0 0 #t)))
+    (check #b1 (copy-bit 0 0 #t)))
 
   (define check-141
-    (test #b1011 (bit-swap 1 2 #b1101)))
+    (check #b1011 (bit-swap 1 2 #b1101)))
 
   (define check-142
-    (test #b1011 (bit-swap 2 1 #b1101)))
+    (check #b1011 (bit-swap 2 1 #b1101)))
 
   (define check-143
-    (test #b1110 (bit-swap 0 1 #b1101)))
+    (check #b1110 (bit-swap 0 1 #b1101)))
 
   (define check-144
-    (test #b10000000101 (bit-swap 3 10 #b1101)))
+    (check #b10000000101 (bit-swap 3 10 #b1101)))
 
   (define check-145
-    (test 1 (bit-swap 0 2 4)))
+    (check 1 (bit-swap 0 2 4)))
 
   (define check-146
-    (test #t (any-bit-set? 3 6)))
+    (check #t (any-bit-set? 3 6)))
 
   (define check-147
-    (test #f (any-bit-set? 3 12)))
+    (check #f (any-bit-set? 3 12)))
 
   (define check-148
-    (test #t (every-bit-set? 4 6)))
+    (check #t (every-bit-set? 4 6)))
 
   (define check-149
-    (test #f (every-bit-set? 7 6)))
+    (check #f (every-bit-set? 7 6)))
 
   (define check-150
-    (test -1 (first-set-bit 0)))
+    (check -1 (first-set-bit 0)))
 
   (define check-151
-    (test 0 (first-set-bit 1)))
+    (check 0 (first-set-bit 1)))
 
   (define check-152
-    (test 0 (first-set-bit 3)))
+    (check 0 (first-set-bit 3)))
 
   (define check-153
-    (test 2 (first-set-bit 4)))
+    (check 2 (first-set-bit 4)))
 
   (define check-154
-    (test 1 (first-set-bit 6)))
+    (check 1 (first-set-bit 6)))
 
   (define check-155
-    (test 0 (first-set-bit -1)))
+    (check 0 (first-set-bit -1)))
 
   (define check-156
-    (test 1 (first-set-bit -2)))
+    (check 1 (first-set-bit -2)))
 
   (define check-157
-    (test 0 (first-set-bit -3)))
+    (check 0 (first-set-bit -3)))
 
   (define check-158
-    (test 2 (first-set-bit -4)))
+    (check 2 (first-set-bit -4)))
 
   (define check-159
-    (test 128 (first-set-bit #x100000000000000000000000000000000)))
+    (check 128 (first-set-bit #x100000000000000000000000000000000)))
 
   (define check-160
-    (test 1 (first-set-bit 2)))
+    (check 1 (first-set-bit 2)))
 
   (define check-161
-    (test 3 (first-set-bit 40)))
+    (check 3 (first-set-bit 40)))
 
   (define check-162
-    (test 2 (first-set-bit -28)))
+    (check 2 (first-set-bit -28)))
 
   (define check-163
-    (test 99 (first-set-bit (expt  2 99))))
+    (check 99 (first-set-bit (expt  2 99))))
 
   (define check-164
-    (test 99 (first-set-bit (expt -2 99))))
+    (check 99 (first-set-bit (expt -2 99))))
 
   ;; bitwise/field
 
   (define check-165
-    (test 0 (bit-field 6 0 1)))
+    (check 0 (bit-field 6 0 1)))
 
   (define check-166
-    (test 3 (bit-field 6 1 3)))
+    (check 3 (bit-field 6 1 3)))
 
   (define check-167
-    (test 1 (bit-field 6 2 999)))
+    (check 1 (bit-field 6 2 999)))
 
   (define check-168
-    (test 1 (bit-field #x100000000000000000000000000000000 128 129)))
+    (check 1 (bit-field #x100000000000000000000000000000000 128 129)))
 
   (define check-169
-    (test #b1010 (bit-field #b1101101010 0 4)))
+    (check #b1010 (bit-field #b1101101010 0 4)))
 
   (define check-170
-    (test #b101101 (bit-field #b1101101010 3 9)))
+    (check #b101101 (bit-field #b1101101010 3 9)))
 
   (define check-171
-    (test #b10110 (bit-field #b1101101010 4 9)))
+    (check #b10110 (bit-field #b1101101010 4 9)))
 
   (define check-172
-    (test #b110110 (bit-field #b1101101010 4 10)))
+    (check #b110110 (bit-field #b1101101010 4 10)))
 
   (define check-173
-    (test #t (bit-field-any? #b101101 0 2)))
+    (check #t (bit-field-any? #b101101 0 2)))
 
   (define check-174
-    (test #t (bit-field-any? #b101101 2 4)))
+    (check #t (bit-field-any? #b101101 2 4)))
 
   (define check-175
-    (test #f (bit-field-any? #b101101 1 2)))
+    (check #f (bit-field-any? #b101101 1 2)))
 
   (define check-176
-    (test #f (bit-field-every? #b101101 0 2)))
+    (check #f (bit-field-every? #b101101 0 2)))
 
   (define check-177
-    (test #t (bit-field-every? #b101101 2 4)))
+    (check #t (bit-field-every? #b101101 2 4)))
 
   (define check-178
-    (test #t (bit-field-every? #b101101 0 1)))
+    (check #t (bit-field-every? #b101101 0 1)))
 
   (define check-179
-    (test #b100000 (bit-field-clear #b101010 1 4)))
+    (check #b100000 (bit-field-clear #b101010 1 4)))
 
   (define check-180
-    (test #b101110 (bit-field-set #b101010 1 4)))
+    (check #b101110 (bit-field-set #b101010 1 4)))
 
   (define check-181
-    (test #b111 (bit-field-replace #b110 1 0 1)))
+    (check #b111 (bit-field-replace #b110 1 0 1)))
 
   (define check-182
-    (test #b110 (bit-field-replace #b110 1 1 2)))
+    (check #b110 (bit-field-replace #b110 1 1 2)))
 
   (define check-183
-    (test #b010 (bit-field-replace #b110 1 1 3)))
+    (check #b010 (bit-field-replace #b110 1 1 3)))
 
   (define check-184
-    (test #b100100 (bit-field-replace #b101010 #b010 1 4)))
+    (check #b100100 (bit-field-replace #b101010 #b010 1 4)))
 
   (define check-185
-    (test #b1001 (bit-field-replace-same #b1111 #b0000 1 3)))
+    (check #b1001 (bit-field-replace-same #b1111 #b0000 1 3)))
 
   (define check-186
-    (test #b110  (bit-field-rotate #b110 1 1 2)))
+    (check #b110  (bit-field-rotate #b110 1 1 2)))
 
   (define check-187
-    (test #b1010 (bit-field-rotate #b110 1 2 4)))
+    (check #b1010 (bit-field-rotate #b110 1 2 4)))
 
   ;; TODO: FIXME: negative rotation is invalid according to chez
   (define check-188
-    (test #b1011 (bit-field-rotate #b0111 -1 1 4)))
+    (check #b1011 (bit-field-rotate #b0111 -1 1 4)))
 
   (define check-189
-    (test #b0  (bit-field-rotate #b0 128 0 256)))
+    (check #b0  (bit-field-rotate #b0 128 0 256)))
 
   (define check-190
-    (test #b1  (bit-field-rotate #b1 128 1 256)))
+    (check #b1  (bit-field-rotate #b1 128 1 256)))
 
   (define check-191
-    (test #x100000000000000000000000000000000
+    (check #x100000000000000000000000000000000
 	  (bit-field-rotate #x100000000000000000000000000000000 128 0 64)))
 
   (define check-192
-    (test #x100000000000000000000000000000008
+    (check #x100000000000000000000000000000008
 	  (bit-field-rotate #x100000000000000000000000000000001 3 0 64)))
 
   ;; TODO: FIXME: negative rotation is invalid according to chez
   (define check-193
-   (test #x100000000000000002000000000000000
+   (check #x100000000000000002000000000000000
          (bit-field-rotate #x100000000000000000000000000000001 -3 0 64)))
 
   (define check-194
-    (test #b110 (bit-field-rotate #b110 0 0 10)))
+    (check #b110 (bit-field-rotate #b110 0 0 10)))
 
   (define check-195
-    (test #b110 (bit-field-rotate #b110 0 0 256)))
+    (check #b110 (bit-field-rotate #b110 0 0 256)))
 
   (define check-196
-    (test 1 (bit-field-rotate #x100000000000000000000000000000000 1 0 129)))
+    (check 1 (bit-field-rotate #x100000000000000000000000000000000 1 0 129)))
 
   (define check-197
-    (test 6 (bit-field-reverse 6 1 3)))
+    (check 6 (bit-field-reverse 6 1 3)))
 
   (define check-198
-    (test 12 (bit-field-reverse 6 1 4)))
+    (check 12 (bit-field-reverse 6 1 4)))
 
   (define check-199
-    (test #x80000000 (bit-field-reverse 1 0 32)))
+    (check #x80000000 (bit-field-reverse 1 0 32)))
 
   (define check-200
-    (test #x40000000 (bit-field-reverse 1 0 31)))
+    (check #x40000000 (bit-field-reverse 1 0 31)))
 
   (define check-201
-    (test #x20000000 (bit-field-reverse 1 0 30)))
+    (check #x20000000 (bit-field-reverse 1 0 30)))
 
   (define check-202
-    (test (bitwise-ior (arithmetic-shift -1 32) #xFBFFFFFF)
+    (check (bitwise-ior (arithmetic-shift -1 32) #xFBFFFFFF)
 	  (bit-field-reverse -2 0 27)))
 
   (define check-203
-    (test (bitwise-ior (arithmetic-shift -1 32) #xF7FFFFFF)
+    (check (bitwise-ior (arithmetic-shift -1 32) #xF7FFFFFF)
 	  (bit-field-reverse -2 0 28)))
 
   (define check-204
-    (test (bitwise-ior (arithmetic-shift -1 32) #xEFFFFFFF)
+    (check (bitwise-ior (arithmetic-shift -1 32) #xEFFFFFFF)
 	  (bit-field-reverse -2 0 29)))
 
   (define check-205
-    (test (bitwise-ior (arithmetic-shift -1 32) #xDFFFFFFF)
+    (check (bitwise-ior (arithmetic-shift -1 32) #xDFFFFFFF)
 	  (bit-field-reverse -2 0 30)))
 
   (define check-206
-    (test (bitwise-ior (arithmetic-shift -1 32) #xBFFFFFFF)
+    (check (bitwise-ior (arithmetic-shift -1 32) #xBFFFFFFF)
 	  (bit-field-reverse -2 0 31)))
 
   (define check-207
-    (test (bitwise-ior (arithmetic-shift -1 32) #x7FFFFFFF)
+    (check (bitwise-ior (arithmetic-shift -1 32) #x7FFFFFFF)
 	  (bit-field-reverse -2 0 32)))
 
   (define check-208
-    (test 5 (bit-field-reverse #x140000000000000000000000000000000 0 129)))
+    (check 5 (bit-field-reverse #x140000000000000000000000000000000 0 129)))
 
   ;; bitwise/conversion
 
   (define check-209
-    (test '(#t #f #t #f #t #t #t) (bits->list #b1110101)))
+    (check '(#t #f #t #f #t #t #t) (bits->list #b1110101)))
 
   (define check-210
-    (test '(#f #t #f #t) (bits->list #b111010 4)))
+    (check '(#f #t #f #t) (bits->list #b111010 4)))
 
   (define check-211
-    (test #b1110101 (list->bits '(#t #f #t #f #t #t #t))))
+    (check #b1110101 (list->bits '(#t #f #t #f #t #t #t))))
 
   (define check-212
-    (test #b111010100 (list->bits '(#f #f #t #f #t #f #t #t #t))))
+    (check #b111010100 (list->bits '(#f #f #t #f #t #f #t #t #t))))
 
   (define check-213
-    (test '(#t #t) (bits->list 3)))
+    (check '(#t #t) (bits->list 3)))
 
   (define check-214
-    (test '(#f #t #t #f) (bits->list 6 4)))
+    (check '(#f #t #t #f) (bits->list 6 4)))
 
   (define check-215
-    (test '(#f #t) (bits->list 6 2)))
+    (check '(#f #t) (bits->list 6 2)))
 
   (define check-216
-    (test '(#t #f #f #f #f #f #f #f #f #f #f #f #f #f #f #f
+    (check '(#t #f #f #f #f #f #f #f #f #f #f #f #f #f #f #f
 	       #f #f #f #f #f #f #f #f #f #f #f #f #f #f #f #f
 	       #f #f #f #f #f #f #f #f #f #f #f #f #f #f #f #f
 	       #f #f #f #f #f #f #f #f #f #f #f #f #f #f #f #f
@@ -722,7 +722,7 @@ check-238 check-239 check-240 check-241 check-242 check-243)
 	  (bits->list 1 128)))
 
   (define check-217
-    (test '(#f
+    (check '(#f
 	    #f #f #f #f #f #f #f #f #f #f #f #f #f #f #f #f
 	    #f #f #f #f #f #f #f #f #f #f #f #f #f #f #f #f
 	    #f #f #f #f #f #f #f #f #f #f #f #f #f #f #f #f
@@ -734,19 +734,19 @@ check-238 check-239 check-240 check-241 check-242 check-243)
 	  (bits->list #x100000000000000000000000000000000)))
 
   (define check-218
-    (test 6 (list->bits '(#f #t #t))))
+    (check 6 (list->bits '(#f #t #t))))
 
   (define check-219
-    (test 12 (list->bits '(#f #f #t #t))))
+    (check 12 (list->bits '(#f #f #t #t))))
 
   (define check-220
-    (test 6 (list->bits '(#f #t #t #f))))
+    (check 6 (list->bits '(#f #t #t #f))))
 
   (define check-221
-    (test 2 (list->bits '(#f #t))))
+    (check 2 (list->bits '(#f #t))))
 
   (define check-222
-    (test 1 (list->bits
+    (check 1 (list->bits
 	     '(#t #f #f #f #f #f #f #f #f #f #f #f #f #f #f #f
 		  #f #f #f #f #f #f #f #f #f #f #f #f #f #f #f #f
 		  #f #f #f #f #f #f #f #f #f #f #f #f #f #f #f #f
@@ -757,7 +757,7 @@ check-238 check-239 check-240 check-241 check-242 check-243)
 		  #f #f #f #f #f #f #f #f #f #f #f #f #f #f #f #f))))
 
   (define check-223
-    (test #x100000000000000000000000000000000
+    (check #x100000000000000000000000000000000
 	  (list->bits
 	   '(#f
 	     #f #f #f #f #f #f #f #f #f #f #f #f #f #f #f #f
@@ -770,95 +770,95 @@ check-238 check-239 check-240 check-241 check-242 check-243)
 	     #f #f #f #f #f #f #f #f #f #f #f #f #f #f #f #t))))
 
   (define check-224
-    (test #x03FFFFFF (list->bits '(#t #t
+    (check #x03FFFFFF (list->bits '(#t #t
 				      #t #t #t #t #t #t #t #t
 				      #t #t #t #t #t #t #t #t
 				      #t #t #t #t #t #t #t #t))))
 
   (define check-225
-    (test #x07FFFFFF (list->bits '(#t #t #t
+    (check #x07FFFFFF (list->bits '(#t #t #t
 				      #t #t #t #t #t #t #t #t
 				      #t #t #t #t #t #t #t #t
 				      #t #t #t #t #t #t #t #t))))
 
   (define check-226
-    (test #x0FFFFFFF (list->bits '(#t #t #t #t
+    (check #x0FFFFFFF (list->bits '(#t #t #t #t
 				      #t #t #t #t #t #t #t #t
 				      #t #t #t #t #t #t #t #t
 				      #t #t #t #t #t #t #t #t))))
 
   (define check-227
-    (test #x1FFFFFFF (list->bits '(#t #t #t #t #t
+    (check #x1FFFFFFF (list->bits '(#t #t #t #t #t
 				      #t #t #t #t #t #t #t #t
 				      #t #t #t #t #t #t #t #t
 				      #t #t #t #t #t #t #t #t))))
 
   (define check-228
-    (test #x3FFFFFFF (list->bits '(#t #t #t #t #t #t
+    (check #x3FFFFFFF (list->bits '(#t #t #t #t #t #t
 				      #t #t #t #t #t #t #t #t
 				      #t #t #t #t #t #t #t #t
 				      #t #t #t #t #t #t #t #t))))
 
   (define check-229
-    (test #x7FFFFFFF (list->bits '(#t #t #t #t #t #t #t
+    (check #x7FFFFFFF (list->bits '(#t #t #t #t #t #t #t
 				      #t #t #t #t #t #t #t #t
 				      #t #t #t #t #t #t #t #t
 				      #t #t #t #t #t #t #t #t))))
   (define check-230
-    (test #xFFFFFFFF (list->bits '(#t #t #t #t #t #t #t #t
+    (check #xFFFFFFFF (list->bits '(#t #t #t #t #t #t #t #t
 				      #t #t #t #t #t #t #t #t
 				      #t #t #t #t #t #t #t #t
 				      #t #t #t #t #t #t #t #t))))
 
   (define check-231
-    (test #x1FFFFFFFF (list->bits '(#t
+    (check #x1FFFFFFFF (list->bits '(#t
 				    #t #t #t #t #t #t #t #t
 				    #t #t #t #t #t #t #t #t
 				    #t #t #t #t #t #t #t #t
 				    #t #t #t #t #t #t #t #t))))
 
   (define check-232
-    (test 1 (list->bits '(#t #f))))
+    (check 1 (list->bits '(#t #f))))
 
   (define check-233
-    (test #b1110101 (vector->bits '#(#t #f #t #f #t #t #t))))
+    (check #b1110101 (vector->bits '#(#t #f #t #f #t #t #t))))
 
   (define check-234
-    (test #b00011010100 (vector->bits '#(#f #f #t #f #t #f #t #t))))
+    (check #b00011010100 (vector->bits '#(#f #f #t #f #t #f #t #t))))
 
   (define check-235
-    (test '#(#t #t #t #f #t #f #t #f #f) (bits->vector #b1010111 9)))
+    (check '#(#t #t #t #f #t #f #t #f #f) (bits->vector #b1010111 9)))
 
   (define check-236
-    (test '#(#t #t #t #f #t #f #t #f #f) (bits->vector #b1010111 9)))
+    (check '#(#t #t #t #f #t #f #t #f #f) (bits->vector #b1010111 9)))
 
   (define check-237
-    (test #b1110101 (bits #t #f #t #f #t #t #t)))
+    (check #b1110101 (bits #t #f #t #f #t #t #t)))
 
   (define check-238
-    (test 0 (bits)))
+    (check 0 (bits)))
 
   (define check-239
-    (test #b111010100 (bits #f #f #t #f #t #f #t #t #t)))
+    (check #b111010100 (bits #f #f #t #f #t #f #t #t #t)))
 
   ;; bitwise/fold
 
   (define check-240
-    (test '(#t #f #t #f #t #t #t) (bitwise-fold cons '() #b1010111)))
+    (check '(#t #f #t #f #t #t #t) (bitwise-fold cons '() #b1010111)))
 
   (define check-241
-    (test 5
+    (check 5
           (let ((count 0))
             (bitwise-for-each (lambda (b) (if b (set! count (+ count 1))))
                               #b1010111)
             count)))
 
   (define check-242
-    (test #b101010101
+    (check #b101010101
           (bitwise-unfold (lambda (i) (= i 10)) even? (lambda (i) (+ i 1)) 0)))
 
   (define check-243
-    (test #t
+    (check #t
           (let ((g (make-bitwise-generator #b110)))
             (and
              (equal? #f (g))

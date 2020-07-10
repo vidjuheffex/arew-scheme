@@ -7,10 +7,10 @@
   (import (scheme base) (check))
 
   (define test-0
-    (test #t #t))
+    (check #t #t))
 
   (define test-1
-    (test boolean=? #t #t))
+    (check boolean=? #t #t))
 
   (define test-2
     (check-raise symbol? (raise 'oops)))
