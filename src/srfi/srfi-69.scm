@@ -129,7 +129,7 @@
                      (cons (cons k v) l))
                    '()))
 
-(define hash-table-copy hashtable-copy)
+(define hash-table-copy (lambda (x) (hashtable-copy x #t)))
 
 (define (hash-table-merge! table1 table2)
   (hash-table-walk table2 (lambda (k v)
