@@ -1318,7 +1318,7 @@
          ($vector->list vec start (vector-length vec))]
         [(vec start end)
          ($check-types 'vector->list vec start end)
-         ($vector->list vec start (vector-length vec))])))
+         ($vector->list vec start end)])))
 
   ;; (REVERSE-VECTOR->LIST <vector> [<start> <end>]) -> list
   ;;   Produce a list containing the elements in the locations between
