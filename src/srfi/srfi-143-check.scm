@@ -11,16 +11,16 @@ check-48 check-49 check-50 check-51 check-52 check-53 check-54
 check-55 check-56 check-57 check-58 check-59 check-60 check-61
 check-62 check-63 check-64 check-65 check-66 check-67 check-68
 check-69 check-70 check-71 check-72 check-73 #;check-74 check-75
-check-76 check-77 check-78 check-79 check-80 check-81 check-82
-check-83 check-84 check-85 check-86 check-87 check-88 check-89
-check-90 check-91 check-92 check-93 check-94 check-95 check-96
+check-76 #;check-77 #;check-78 #;check-79 #;check-80 #;check-81 #;check-82
+#;check-83 #;check-84 check-85 check-86 check-87 check-88 check-89
+check-90 #;check-91 check-92 check-93 check-94 check-95 check-96
 check-97 check-98 check-99 check-100 check-101 check-102 check-103
 check-104 check-105 check-106 check-107 check-108 check-109 check-110
-#;check-111 #;check-112 check-113 check-114 check-115 check-116 check-117
+#;check-111 #;check-112 check-113 #;check-114 #;check-115 check-116 check-117
 check-118 check-119 check-120 check-121 check-122 check-123 check-124
 check-125 check-126 check-127 check-128 check-129 check-130 check-131
 check-132 check-133 check-134 check-135 check-136 check-137 check-138
-check-139 check-140)
+check-139 #;check-140)
 
   (import (scheme base) (check) (srfi srfi-143))
 

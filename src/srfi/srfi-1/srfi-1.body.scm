@@ -868,8 +868,10 @@
     ;; Fast path 1
     ((kons knil lis1)
      (check-arg procedure? kons fold)
-     (let lp ((lis lis1) (ans knil))
-       (if (null-list? lis) ans
+     (let lp ((lis lis1)
+              (ans knil))
+       (if (null-list? lis)
+           ans
            (lp (cdr lis) (kons (car lis) ans)))))
     ;; Fast path 2
     ((kons knil lis1 lis2)
@@ -879,17 +881,14 @@
            ans
            (lp (cdr lis1) (cdr lis2) (kons (car lis1) (car lis2) ans)))))
     ;; N-ary case
-    ((kons knil lis1 lis2 lis3 . lists)
+    ((kons knil . lists)
      (check-arg procedure? kons fold)
-     (let lp ((lis1 lis1) (lis2 lis2) (lis3 lis3)
-              (lists lists) (ans knil))
-       (if (or (null-list? lis1) (null-list? lis2) (null-list? lis3))
-           (receive (cars+ans cdrs) (%cars+cdrs+ lists ans)
-             (if (null? cars+ans)
-                 ans
-                 (lp (cdr lis1) (cdr lis2) (cdr lis3) cdrs
-                     (apply kons (car lis1) (car lis2) (car lis3) cars+ans)))))))))
-
+     (let loop ((lists lists)
+                (ans knil))
+       (if (any null? lists)
+           ans
+           (loop (map cdr lists)
+                 (apply kons (append (map car lists) (list ans)))))))))
 
 (define fold-right
   (case-lambda
@@ -907,19 +906,13 @@
            knil
            (kons (car lis1) (car lis2) (recur (cdr lis1) (cdr lis2))))))
     ;; N-ary case
-    ((kons knil lis1 lis2 lis3 . lists)
+    ((kons knil . lists)
      (check-arg procedure? kons fold-right)
-     (let recur ((lis1 lis1) (lis2 lis2) (lis3 lis3)
-                 (lists lists))
-       (if (or (null-list? lis1) (null-list? lis2) (null-list? lis3))
+     (let recur ((lists (map reverse lists)))
+       (if (any null? lists)
            knil
-           (let ((cdrs (%cdrs lists)))
-             (if (null? cdrs) knil
-                 (apply kons (car lis1) (car lis2) (car lis3)
-                        (%cars+ lists (recur (cdr lis1) (cdr lis2) (cdr lis3)
-                                             cdrs))))))))))
-
-
+           (apply kons (append (map car lists)
+                               (list (recur (map cdr lists))))))))))
 (define pair-fold-right
   (case-lambda
     ;; Fast path

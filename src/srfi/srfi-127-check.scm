@@ -243,13 +243,13 @@ check-106 check-107 check-108 check-109 check-110)
   (define out! (lambda (x) (set! output (cons x output))))
 
   (define check-068
-    (check output (begin (lseq-for-each out! '())) '()))
+    (check output (begin (lseq-for-each out! '()) '())))
 
   (define check-069
     (check output (begin (lseq-for-each out! '(a b c)) '(c b a))))
 
   (define check-070
-    (check output (begin (lseq-for-each out! (make-lseq 1 2 3))) '(3 2 1 c b a)))
+    (check output (begin (lseq-for-each out! (make-lseq 1 2 3)) '(3 2 1 c b a))))
 
   (define check-071
     (check '() (lseq-filter odd? '())))

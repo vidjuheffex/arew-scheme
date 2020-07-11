@@ -1082,29 +1082,30 @@ check-279 check-280 check-281)
     (bag-partition big bag-whole))
 
   (define check-231
-    (check bag=? top (begin (bag-partition! big whole4) (bag-filter big whole))))
+    (check bag=? bag-top (begin (bag-partition! big bag-whole4) (bag-filter big bag-whole))))
 
   (define check-232
-    (check bag=? bottom (bag-remove big whole)))
+    (check bag=? bag-bottom (bag-remove big bag-whole)))
 
   (define check-233
-    (check bag=? (begin (bag-filter! big whole2) (not (bag-contains? whole2 1)))))
+    (check (begin (bag-filter! big bag-whole2) (not (bag-contains? bag-whole2 1)))))
 
   (define check-234
-    (check bag=? (begin
-                   (bag-remove! big whole3)
-                   (not (bag-contains? whole3 10)))))
+    (check (begin
+             (bag-remove! big bag-whole3)
+             (not (bag-contains? bag-whole3 10)))))
+
   (define check-235
-    (check bag=? top topx-bis))
+    (check bag=? bag-top topx-bis))
 
   (define check-236
-    (check bag=? bottom bottomx-bis))
+    (check bag=? bag-bottom bottomx-bis))
 
   (define check-237
-    (check bag=? top whole4))
+    (check bag=? bag-top bag-whole4))
 
   (define check-238
-    (check 5 (bag-count big whole)))
+    (check 5 (bag-count big bag-whole)))
 
   (define hetero-bis (bag eqv-comparator 1 2 'a 3 4))
   (define homo-bis (bag eqv-comparator 1 2 3 4 5))

@@ -49,7 +49,15 @@
 
     (define-syntax-rule (run-check library-name check-name check)
       (begin
-        (guard (obj (else (vector #f 'error obj)))
+        (guard (obj
+                ((condition? obj)
+                 (display (vector #f 'error (list (condition-message obj)
+                                                  (condition-irritants obj))))
+                 (newline)
+                 (exit 1))
+                (else (display (vector #f 'error obj))
+                      (newline)
+                      (exit 1)))
           (display "** ")
           (display 'library-name)
           (display " ")

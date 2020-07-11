@@ -194,7 +194,7 @@ check-104)
     (check 2 (vector-count < '#(1 3 6 9) '#(2 4 6 8 10 12))))
 
   (define check-049
-    (check '#(3 4 8 9 14 23 25 30 36) (vector-cumulate + 0 '#(3 1 4 1 5 9 2 5 6))))
+    (check '#(3 4 8 9 14 23 25 30 36) (vector-cumulate + '#(3 1 4 1 5 9 2 5 6) 0)))
 
   (define (cmp a b)
     (cond
@@ -268,8 +268,8 @@ check-104)
 
   (define check-071
     (let-values (((new off) (vector-partition number? '#(1 x 2 y 3 z))))
-      (and (equal? '#(1 2 3 x y z) (vector-copy new))
-           (equal? 3 (+ off 0)))))
+      (check (and (equal? '#(1 2 3 x y z) (vector-copy new))
+                  (equal? 3 (+ off 0))))))
 
   (define vs (vector 1 2 3))
   (define vf0 (vector 1 2 3))
