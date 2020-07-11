@@ -9,41 +9,42 @@
 
   (export check-000 check-001 check-002 check-003 check-004 check-005
 check-006 check-007 check-008 check-009 check-010 check-011 check-012
-check-013 check-014 check-015 check-016 check-017 check-018 check-019
-check-020 check-021 check-022 check-023 check-024 check-025 check-026
-check-027 check-028 check-029 check-030 check-031 check-032 check-033
-check-034 check-035 check-036 check-037 check-038 check-039 check-040
-check-041 check-042 check-043 check-044 check-045 check-046 check-047
-check-048 check-049 check-050 check-051 check-052 check-053 check-054
-check-055 check-056 check-057 check-058 check-059 check-060 check-061
-check-062 check-063 check-064 check-065 check-066 check-067 check-068
-check-069 check-070 check-071 check-072 check-073 check-074 check-075
-check-076 check-077 check-078 check-079 check-080 check-081 check-082
-check-083 check-084 check-085 check-086 check-087 check-088 check-089
-check-090 check-091 check-092 check-093 check-094 check-095 check-096
-check-097 check-098 check-099 check-100 check-101 check-102 check-103
-check-104 check-105 check-106 check-107 check-108 check-109 check-110
-check-111 check-112 check-113 check-114 check-115 check-116 check-117
-check-118 check-119 check-120 check-121 check-122 check-123 check-124
-check-125 check-126 check-127 check-128 check-129 check-130 check-131
-check-132 check-133 check-134 check-135 check-136 check-137 check-138
-check-139 check-140 check-141 check-142 check-143 check-144 check-145
-check-146 check-147 check-148 check-149 check-150 check-151 check-152
-check-153 check-154 check-155 check-156 check-157 check-158 check-159
-check-160 check-161 check-162 check-163 check-164 check-165 check-166
-check-167 check-168 check-169 check-170 check-171 check-172 check-173
-check-174 check-175 check-176 check-177 check-178 check-179 check-180
-check-181 check-182 check-183 check-184 check-185 check-186 check-187
-check-188 check-189 check-190 check-191 check-192 check-193 check-194
-check-195 check-196 check-197 check-198 check-199 check-200 check-201
-check-202 check-203 check-204 check-205 check-206 check-207 check-208
-check-209 check-210 check-211 check-212 check-213 check-214 check-215
-check-216 check-217 check-218 check-219 check-220 check-221 check-222
-check-223 check-224 check-225 check-226 check-227 check-228 check-229
-check-230 check-231 check-232 check-233 check-234 check-235 check-236
-check-237 check-238 check-generators check-239 check-240 check-241
-check-242 check-243 check-244 check-245 check-246 check-247 check-248
-check-249 check-250 check-251 check-252 check-253 check-254)
+check-013 check-014 check-015 check-016 check-017 check-018
+check-018.1 check-018.2 check-018.3 check-019 check-020 check-021
+check-022 check-023 check-024 check-025 check-026 check-027 check-028
+check-029 check-030 check-031 check-032 check-033 check-034 check-035
+check-036 check-037 check-038 check-039 check-040 check-041 check-042
+check-043 check-044 check-045 check-046 check-047 check-048 check-049
+check-050 check-051 check-052 check-053 check-054 check-055 check-056
+check-057 check-058 check-059 check-060 check-061 check-062 check-063
+check-064 check-065 check-066 check-067 check-068 check-069 check-070
+check-071 check-072 check-073 check-074 check-075 check-076 check-077
+check-078 check-079 check-080 check-081 check-082 check-083 check-084
+check-085 check-086 check-087 check-088 check-089 check-090 check-091
+check-092 check-093 check-094 check-095 check-096 check-097 check-098
+check-099 check-100 check-101 check-102 check-103 check-104 check-105
+check-106 check-107 check-108 check-109 check-110 check-111 check-112
+check-113 check-114 check-115 check-116 check-117 check-118 check-119
+check-120 check-121 check-122 check-123 check-124 check-125 check-126
+check-127 check-128 check-129 check-130 check-131 check-132 check-133
+check-134 check-135 check-136 check-137 check-138 check-139 check-140
+check-141 check-142 check-143 check-144 check-145 check-146 check-147
+check-148 check-149 check-150 check-151 check-152 check-153 check-154
+check-155 check-156 check-157 check-158 check-159 check-160 check-161
+check-162 check-163 check-164 check-165 check-166 check-167 check-168
+check-169 check-170 check-171 check-172 check-173 check-174 check-175
+check-176 check-177 check-178 check-179 check-180 check-181 check-182
+check-183 check-184 check-185 check-186 check-187 check-188 check-189
+check-190 check-191 check-192 check-193 check-194 check-195 check-196
+check-197 check-198 check-199 check-200 check-201 check-202 check-203
+check-204 check-205 check-206 check-207 check-208 check-209 check-210
+check-211 check-212 check-213 check-214 check-215 check-216 check-217
+check-218 check-219 check-220 check-221 check-222 check-223 check-224
+check-225 check-226 check-227 check-228 check-229 check-230 check-231
+check-232 check-233 check-234 check-235 check-236 check-237 check-238
+check-generators check-239 check-240 check-241 check-242 check-243
+check-244 check-245 check-246 check-247 check-248 check-249 check-250
+check-251 check-252 check-253 check-254)
 
   (begin
 
@@ -194,6 +195,13 @@ check-249 check-250 check-251 check-252 check-253 check-254)
 
   (define check-018.2
     (let ((n 16))
+      (check (iota n)
+             (finger-tree->list
+              (apply finger-tree add measure (iota n))))))
+
+
+  (define check-018.3
+    (let ((n 33))
       (check (iota n)
              (finger-tree->list
               (apply finger-tree add measure (iota n))))))
