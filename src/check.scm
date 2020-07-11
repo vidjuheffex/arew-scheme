@@ -25,7 +25,7 @@
         ((check expected actual)
          (check equal? expected actual))
         ((check actual)
-         (check equal? #t actual))
+         (check (lambda (x y) (if x #t #f)) #t actual))
         ((check predicate? v0 v1 ...)
          (check (predicate? v0 v1 ...)))))
 
