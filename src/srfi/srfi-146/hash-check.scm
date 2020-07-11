@@ -20,19 +20,21 @@
 ;; ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 ;; CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 ;; SOFTWARE.
-(library (srfi srfi-146 hash-tests)
-  (export
-   test-000 test-001 test-002 test-003 test-004 test-005 test-006 test-007 test-008 test-009
-   test-010 test-011 test-012 test-013 test-014 test-015 test-016 test-017 test-018 test-019
-   test-020 test-021 test-022 test-023 test-024 test-025 test-026 test-027 test-028 test-029
-   test-030 test-031 test-032 test-033 test-034 test-035 test-036 test-037 test-038 test-039
-   test-040 test-041 test-042 test-043 test-044 test-045 test-046 test-047 test-048 test-049
-   test-050 test-051 test-052 test-053 test-054 test-055 test-056 test-057 test-058 test-059
-   test-060 test-061 test-062 test-063 test-064 test-065 test-066 test-067 test-068 test-069
-   test-070 test-071 test-072 test-073 test-074)
+(library (srfi srfi-146 hash-check)
+  (export check-000 check-001 check-002 check-003 check-004 check-005
+check-006 check-007 check-008 check-009 check-010 check-011 check-012
+check-013 check-014 check-015 check-016 check-017 check-018 check-019
+check-020 check-021 check-022 check-023 check-024 check-025 check-026
+check-027 check-028 check-029 check-030 check-031 check-032 check-033
+check-034 check-035 check-036 check-037 check-038 check-039 check-040
+check-041 check-042 check-043 check-044 check-045 check-046 check-047
+check-048 check-049 check-050 check-051 check-052 check-053 check-054
+check-055 check-056 check-057 check-058 check-059 check-060 check-061
+check-062 check-063 check-064 check-065 check-066 check-067 check-068
+check-069 check-070 check-071 check-072 check-073 check-074)
 
   (import (scheme base)
-          (tests)
+          (check)
 	  (srfi srfi-1)
 	  (srfi srfi-8)
 	  (srfi srfi-128)
@@ -48,72 +50,72 @@
   (define hashmap2 (hashmap comparator 'c 1 'd 2 'e 3))
   (define hashmap3 (hashmap comparator 'd 1 'e 2 'f 3))
 
-  (define test-000
-    (test #t
+  (define check-000
+    (check #t
 	  (hashmap? (hashmap comparator))))
 
-  (define test-001
-    (test #t
+  (define check-001
+    (check #t
 	  (not (hashmap? (list 1 2 3)))))
 
-  (define test-002
-    (test #t
+  (define check-002
+    (check #t
 	  (hashmap-empty? hashmap0)))
 
-  (define test-003
-    (test #t
+  (define check-003
+    (check #t
 	  (not (hashmap-empty? hashmap1))))
 
-  (define test-004
-    (test #t
+  (define check-004
+    (check #t
 	  (hashmap-contains? hashmap1 'b)))
 
-  (define test-005
-    (test #t
+  (define check-005
+    (check #t
           (not (hashmap-contains? hashmap1 '2))))
 
-  (define test-006
-    (test #t
+  (define check-006
+    (check #t
           (hashmap-disjoint? hashmap1 hashmap3)))
 
-  (define test-007
-    (test #t
+  (define check-007
+    (check #t
           (not (hashmap-disjoint? hashmap1 hashmap2))))
 
   ;; Accessors
   (define hashmap11 (hashmap comparator 'a 1 'b 2 'c 3))
 
-  (define test-008
-    (test
+  (define check-008
+    (check
      2
      (hashmap-ref hashmap11 'b)))
 
-  (define test-009
-    (test
+  (define check-009
+    (check
      42
      (hashmap-ref hashmap11 'd (lambda () 42))))
 
-  ;; TODO: convert to a test
-  ;; (test-error "hashmap-ref: key not found/without failure"
+  ;; TODO: convert to a check
+  ;; (check-error "hashmap-ref: key not found/without failure"
   ;;             (hashmap-ref hashmap1 'd))
 
-  (define test-010
-    (test
+  (define check-010
+    (check
      (* 2 2)
      (hashmap-ref hashmap11 'b (lambda () #f) (lambda (x) (* x x)))))
 
-  (define test-011
-    (test
+  (define check-011
+    (check
      3
      (hashmap-ref/default hashmap11 'c 42)))
 
-  (define test-012
-    (test
+  (define check-012
+    (check
      42
      (hashmap-ref/default hashmap11 'd 42)))
 
-  (define test-013
-    (test
+  (define check-013
+    (check
      comparator
      (hashmap-key-comparator hashmap11)))
 
@@ -125,77 +127,77 @@
   (define hashmap25 (hashmap-adjoin hashmap21 'c 4 'd 4 'd 5))
   (define hashmap20 (hashmap comparator))
 
-  (define test-014
-    (test
+  (define check-014
+    (check
      3
      (hashmap-ref hashmap25 'c)))
 
-  (define test-015
-    (test
+  (define check-015
+    (check
      4
      (hashmap-ref hashmap25 'd)))
 
-  (define test-016
-    (test
+  (define check-016
+    (check
      4
      (hashmap-ref hashmap22 'c)))
 
-  (define test-017
-    (test
+  (define check-017
+    (check
      5
      (hashmap-ref hashmap22 'd)))
 
-  (define test-018
-    (test
+  (define check-018
+    (check
      #f
      (hashmap-ref/default (hashmap-replace hashmap21 'd 4) 'd #f)))
 
-  (define test-019
-    (test
+  (define check-019
+    (check
      6
      (hashmap-ref (hashmap-replace hashmap21 'c 6) 'c)))
 
-  (define test-020
-    (test
+  (define check-020
+    (check
      42
      (hashmap-ref/default (hashmap-delete hashmap21 'b) 'b 42)))
 
-  (define test-021
-    (test
+  (define check-021
+    (check
      42
      (hashmap-ref/default (hashmap-delete-all hashmap21 '(a b)) 'b 42)))
 
-  (define test-022
-    (test
+  (define check-022
+    (check
      (list hashmap21 2)
      (receive result
 	 (hashmap-intern hashmap21 'b (lambda () (error "should not have been invoked")))
        result)))
 
-  (define test-023
-    (test
+  (define check-023
+    (check
      (list 42 42)
      (receive (hashmap value)
 	 (hashmap-intern hashmap21 'd (lambda () 42))
        (list value (hashmap-ref hashmap 'd)))))
 
-  (define test-024
-    (test
+  (define check-024
+    (check
      4
      (hashmap-ref hashmap23 'b)))
 
-  (define test-025
-    (test
+  (define check-025
+    (check
      16
      (hashmap-ref hashmap24 'd)))
 
-  (define test-026
-    (test
+  (define check-026
+    (check
      'empty
      (hashmap-pop hashmap20 (lambda () 'empty))))
 
-  ;; TODO: convert to a test
-  ;; (test-assert "hashmap-pop: non-empty hashmap"
+  ;; TODO: convert to a check
+  ;; (check-assert "hashmap-pop: non-empty hashmap"
   ;;   (member
   ;;    (receive (hashmap key value)
   ;;        (hashmap-pop hashmap1)
@@ -206,18 +208,18 @@
   (define hashmap30 (hashmap comparator))
   (define hashmap31 (hashmap comparator 'a 1 'b 2 'c 3))
 
-  (define test-027
-    (test
+  (define check-027
+    (check
      0
      (hashmap-size hashmap30)))
 
-  (define test-028
-    (test
+  (define check-028
+    (check
      3
      (hashmap-size hashmap31)))
 
-  (define test-029
-    (test
+  (define check-029
+    (check
      (list 'b 2)
      (receive result
 	 (hashmap-find (lambda (key value)
@@ -227,8 +229,8 @@
 		       (lambda () (error "should not have been called")))
        result)))
 
-  (define test-030
-    (test
+  (define check-030
+    (check
      (list 42)
      (receive result
 	 (hashmap-find (lambda (key value)
@@ -238,49 +240,49 @@
 			 42))
        result)))
 
-  (define test-031
-    (test
+  (define check-031
+    (check
      2
      (hashmap-count (lambda (key value)
 		      (>= value 2))
 		    hashmap31)))
 
-  (define test-032
-    (test #t
+  (define check-032
+    (check #t
           (hashmap-any? (lambda (key value)
 		          (= value 3))
 		        hashmap31)))
 
-  (define test-033
-    (test #t
+  (define check-033
+    (check #t
           (not (hashmap-any? (lambda (key value)
 			       (= value 4))
 			     hashmap31))))
 
-  (define test-034
-    (test #t
+  (define check-034
+    (check #t
           (hashmap-every? (lambda (key value)
 		            (<= value 3))
 		          hashmap31)))
 
-  (define test-035
-    (test #t
+  (define check-035
+    (check #t
 	  (not (hashmap-every? (lambda (key value)
 			         (<= value 2))
 			       hashmap31))))
 
-  (define test-036
-    (test
+  (define check-036
+    (check
      3
      (length (hashmap-keys hashmap31))))
 
-  (define test-037
-    (test
+  (define check-037
+    (check
      6
      (fold + 0 (hashmap-values hashmap31))))
 
-  (define test-038
-    (test
+  (define check-038
+    (check
      (list 3 6)
      (receive (keys values)
 	 (hashmap-entries hashmap31)
@@ -294,13 +296,13 @@
 			         comparator
 			         hashmap41))
 
-  (define test-039
-    (test
+  (define check-039
+    (check
      20
      (hashmap-ref hashmap42 "b")))
 
-  (define test-040
-    (test
+  (define check-040
+    (check
      6
      (let ((counter 0))
        (hashmap-for-each (lambda (key value)
@@ -308,37 +310,37 @@
 			 hashmap41)
        counter)))
 
-  (define test-041
-    (test
+  (define check-041
+    (check
      6
      (hashmap-fold (lambda (key value acc)
 		     (+ value acc))
 		   0
 		   hashmap41)))
 
-  (define test-042
-    (test
+  (define check-042
+    (check
      (+ (* 1 1) (* 2 2) (* 3 3))
      (fold + 0 (hashmap-map->list (lambda (key value)
 				    (* value value))
 				  hashmap41))))
 
-  (define test-043
-    (test
+  (define check-043
+    (check
      2
      (hashmap-size (hashmap-filter (lambda (key value)
 				     (<= value 2))
 				   hashmap41))))
 
-  (define test-044
-    (test
+  (define check-044
+    (check
      1
      (hashmap-size (hashmap-remove (lambda (key value)
 				     (<= value 2))
 				   hashmap41))))
 
-  (define test-045
-    (test
+  (define check-045
+    (check
      (list 1 2)
      (receive result
 	 (hashmap-partition (lambda (key value)
@@ -351,33 +353,33 @@
   (define hashmap52 (alist->hashmap comparator '((a . 1) (b . 2) (c . 3))))
   (define hashmap53 (alist->hashmap! (hashmap-copy hashmap51) '((d . 4) '(c . 5))))
 
-  (define test-046
-    (test
+  (define check-046
+    (check
      3
      (hashmap-size (hashmap-copy hashmap51))))
 
-  (define test-047
-    (test
+  (define check-047
+    (check
      comparator
      (hashmap-key-comparator (hashmap-copy hashmap51))))
 
-  (define test-048
-    (test
+  (define check-048
+    (check
      (cons 'b 2)
      (assq 'b (hashmap->alist hashmap51))))
 
-  (define test-049
-    (test
+  (define check-049
+    (check
      2
      (hashmap-ref hashmap52 'b)))
 
-  (define test-050
-    (test
+  (define check-050
+    (check
      4
      (hashmap-ref hashmap53 'd)))
 
-  (define test-051
-    (test
+  (define check-051
+    (check
      3
      (hashmap-ref hashmap53 'c)))
 
@@ -394,52 +396,52 @@
 					      (comparator-hash-function comparator))
 			     'a 1 'b 2 'c 3))
 
-  (define test-052
-    (test #t
+  (define check-052
+    (check #t
           (hashmap=? comparator hashmap61 hashmap62)))
 
-  (define test-053
-    (test #t
+  (define check-053
+    (check #t
           (not (hashmap=? comparator hashmap61 hashmap64))))
 
-  (define test-054
-    (test #t
+  (define check-054
+    (check #t
           (not (hashmap=? comparator hashmap61 hashmap66))))
 
-  (define test-055
-    (test #t
+  (define check-055
+    (check #t
           (hashmap<? comparator hashmap63 hashmap61)))
 
-  (define test-056
-    (test #t
+  (define check-056
+    (check #t
           (not (hashmap<? comparator hashmap63 hashmap61 hashmap62))))
 
-  (define test-057
-    (test #t
+  (define check-057
+    (check #t
           (hashmap>? comparator hashmap62 hashmap63)))
 
-  (define test-058
-    (test #t
+  (define check-058
+    (check #t
           (not (hashmap>? comparator hashmap61 hashmap62 hashmap63))))
 
-  (define test-059
-    (test #t
+  (define check-059
+    (check #t
           (hashmap<=? comparator hashmap63 hashmap62 hashmap61)))
 
-  (define test-060
-    (test #t
+  (define check-060
+    (check #t
           (not (hashmap<=? comparator hashmap63 hashmap65))))
 
-  (define test-061
-    (test #t
+  (define check-061
+    (check #t
           (not (hashmap<=? comparator hashmap62 hashmap64))))
 
-  (define test-062
-    (test #t
+  (define check-062
+    (check #t
           (hashmap>=? comparator hashmap64 hashmap63)))
 
-  (define test-063
-    (test #t
+  (define check-063
+    (check #t
           (not (hashmap>=? comparator hashmap65 hashmap63))))
 
   ;; Set theory operations
@@ -450,38 +452,38 @@
   (define hashmap75 (hashmap comparator 'a 1 'c 3))
   (define hashmap76 (hashmap comparator 'd 4 'e 5 'f 6))
 
-  (define test-064
-    (test
+  (define check-064
+    (check
      4
      (hashmap-ref (hashmap-union hashmap71 hashmap72) 'd)))
 
-  (define test-065
-    (test
+  (define check-065
+    (check
      3
      (hashmap-ref (hashmap-union hashmap71 hashmap74) 'c)))
 
-  (define test-066
-    (test
+  (define check-066
+    (check
      6
      (hashmap-size (hashmap-union hashmap71 hashmap72 hashmap76))))
 
-  (define test-067
-    (test
+  (define check-067
+    (check
      3
      (hashmap-ref (hashmap-intersection hashmap71 hashmap74) 'c)))
 
-  (define test-068
-    (test
+  (define check-068
+    (check
      42
      (hashmap-ref/default (hashmap-intersection hashmap71 hashmap75) 'b 42)))
 
-  (define test-069
-    (test
+  (define check-069
+    (check
      2
      (hashmap-size (hashmap-difference hashmap72 hashmap76))))
 
-  (define test-070
-    (test
+  (define check-070
+    (check
      4
      (hashmap-size (hashmap-xor hashmap72 hashmap76))))
 
@@ -499,12 +501,12 @@
 			     hashmap84 "d"
 			     hashmap85 "e"))
 
-  (define test-071
-    (test #t
+  (define check-071
+    (check #t
           (comparator? hashmap-comparator)))
 
-  (define test-072
-    (test
+  (define check-072
+    (check
      (list "a" "a" "c" "d" "e")
      (list (hashmap-ref hashmap80 hashmap81)
 	   (hashmap-ref hashmap80 hashmap82)
@@ -514,10 +516,10 @@
 	   )))
 
   ;; Ordering comparators
-  (define test-073
-    (test #t
+  (define check-073
+    (check #t
           (=? comparator hashmap81 hashmap82)))
 
-  (define test-074
-    (test #t
+  (define check-074
+    (check #t
           (not (=? comparator hashmap81 hashmap84)))))
