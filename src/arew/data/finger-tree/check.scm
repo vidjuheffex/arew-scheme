@@ -1,5 +1,6 @@
 (define-library (arew data finger-tree check)
   (import
+   (only (chezscheme) syntax-case syntax datum->syntax with-syntax)
    (arew data finger-tree)
    (scheme generator)
    (scheme base)
@@ -40,12 +41,9 @@ check-209 check-210 check-211 check-212 check-213 check-214 check-215
 check-216 check-217 check-218 check-219 check-220 check-221 check-222
 check-223 check-224 check-225 check-226 check-227 check-228 check-229
 check-230 check-231 check-232 check-233 check-234 check-235 check-236
-check-237 check-238
-
-check-generator-1 check-generator-2 check-generator-3 check-generator-4
-
-check-239 check-240 check-241 check-242 check-243
-check-244 check-245 check-246)
+check-237 check-238 check-generators check-239 check-240 check-241
+check-242 check-243 check-244 check-245 check-246 check-247 check-248
+check-249 check-250 check-251 check-252 check-253 check-254)
 
   (begin
 
@@ -1044,59 +1042,31 @@ check-244 check-245 check-246)
            (finger-tree->list
           (generator->finger-tree add measure (generator) 0))))
 
-  ;; TODO: use macro to generate those
 
-  ;; (do ((n 0 (+ 1 n)))
-  ;;     ((= n (if *exhaustive*
-  ;;               1000
-  ;;               50)))
-  ;;   (let* ((lst (iota n))
-  ;;          (tree (list->finger-tree add measure lst)))
+  (define check-generators
+    (check #t
+           (let ((out #t))
+             (do ((n 0 (+ 1 n)))
+                 ((= n 1000))
+               (let* ((lst (iota n))
+                      (tree (list->finger-tree add measure lst)))
 
-  ;;     ;; list->finger-tree
-  ;;     (check lst (finger-tree->list tree))
+                 ;; list->finger-tree
+                 (set! out (and out (equal? lst (finger-tree->list tree))))
+                 (set! out
+                       (and out (equal? lst
+                                        (finger-tree->list
+                                         (generator->finger-tree add
+                                                                 measure
+                                                                 (make-iota-generator n))))))
 
-  ;;     ;; generator->finger-tree
-  ;;     (check lst
-  ;;            (finger-tree->list
-  ;;             (generator->finger-tree add measure (make-iota-generator n))))
-
-  ;;     ;; finger-tree->generator
-  ;;     (check lst
-  ;;            (generator->list
-  ;;             (finger-tree->generator tree)))
-
-  ;;     ;; finger-tree->reverse-generator
-  ;;     (check (reverse lst)
-  ;;            (generator->list
-  ;;             (finger-tree->reverse-generator tree)))))
-
-
-  (define n 999)
-  (define lst (iota n))
-  (define tree (list->finger-tree add measure lst))
-
-  (define check-generator-1
-    ;; list->finger-tree
-    (check lst (finger-tree->list tree)))
-
-  (define check-generator-2
-    ;; generator->finger-tree
-    (check lst
-           (finger-tree->list
-            (generator->finger-tree add measure (make-iota-generator n)))))
-
-  (define check-generator-3
-    ;; finger-tree->generator
-    (check lst
-           (generator->list
-            (finger-tree->generator tree))))
-
-  (define check-generator-4
-    ;; finger-tree->reverse-generator
-    (check (reverse lst)
-           (generator->list
-            (finger-tree->reverse-generator tree))))
+                 (set! out (and out (equal? lst
+                                            (generator->list
+                                             (finger-tree->generator tree)))))
+                 (set! out (and out (equal? (reverse lst)
+                                            (generator->list
+                                             (finger-tree->reverse-generator tree)))))))
+             out)))
 
   ;; finger-tree-scan
   (define-syntax-rule (test-scan e t)
@@ -1152,42 +1122,65 @@ check-244 check-245 check-246)
   (define check-246
     (test-scan (oracle 999) t999))
 
-  ;; (define (test-split t)
-  ;;   (let ((split (lambda (query)
-  ;;                  (finger-tree-split add
-  ;;                                     measure
-  ;;                                     (lambda (element)
-  ;;                                       (>= element query))
-  ;;                                     #f
-  ;;                                     t
-  ;;                                     (lambda (prefix element suffix)
-  ;;                                       (values (finger-tree->list prefix)
-  ;;                                               element
-  ;;                                               (finger-tree->list suffix)))
-  ;;                                     (lambda ()
-  ;;                                       #f))))
-  ;;         (lst (finger-tree->list t)))
-  ;;     (finger-tree-for-each (lambda (i)
-  ;;                             (let*-values (((pre rest) (split-at lst i))
-  ;;                                           ((x suf) (car+cdr rest)))
-  ;;                               ;; succeed on matching element
-  ;;                               (test-values (values pre x suf)
-  ;;                                            (split i))
-  ;;                               ;; succeed on mismatched element
-  ;;                               (test-values (values pre x suf)
-  ;;                                            (split (- i 1/2)))))
-  ;;                           t)
-  ;;     ;; fail
-  ;;     (check #f (split (length lst)))))
+  (define-syntax-rule (test-split t)
+    (check #t
+           (let ((out #t)
+                 (split (lambda (query)
+                          (finger-tree-split add
+                                             measure
+                                             (lambda (element)
+                                               (>= element query))
+                                             #f
+                                             t
+                                             (lambda (prefix element suffix)
+                                               (values (finger-tree->list prefix)
+                                                       element
+                                                       (finger-tree->list suffix)))
+                                             (lambda ()
+                                               #f))))
+                 (lst (finger-tree->list t)))
+             (finger-tree-for-each (lambda (i)
+                                     (let*-values (((pre rest) (split-at lst i))
+                                                   ((x suf) (car+cdr rest)))
+                                       ;; succeed on matching element
+                                       (call-with-values (lambda () (split i))
+                                         (lambda (pre* x* suf*)
+                                           (set! out (and out
+                                                          (equal? pre pre*)
+                                                          (equal? x x*)
+                                                          (equal? suf suf*)))))
+                                       ;; succeed on mismatched element
+                                       (call-with-values (lambda () (split i))
+                                         (lambda (pre* x* suf*)
+                                           (set! out (and out
+                                                          (equal? pre pre*)
+                                                          (equal? x x*)
+                                                          (equal? suf suf*)))))))
+                                   t)
+             (and out (not (split (length lst)))))))
 
-  ;; (test-split t0)
-  ;; (test-split t1)
-  ;; (test-split t2)
-  ;; (test-split t5)
-  ;; (test-split t8)
-  ;; (test-split t9)
-  ;; (test-split t33)
+  (define check-247
+    (test-split t0))
 
-  ;; (test-split t999)
+  (define check-248
+    (test-split t1))
+
+  (define check-249
+    (test-split t2))
+
+  (define check-250
+    (test-split t5))
+
+  (define check-251
+    (test-split t8))
+
+  (define check-252
+    (test-split t9))
+
+  (define check-253
+    (test-split t33))
+
+  (define check-254
+    (test-split t999))
 
   )
