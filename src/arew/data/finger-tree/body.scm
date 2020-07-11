@@ -773,28 +773,87 @@
                           (list->generator lst)
                           (length lst)))
 
+;; (define (finger-tree->generator tree)
+;;   (make-coroutine-generator
+;;    (lambda (yield)
+;;      (let recurse ((yield yield) (tree tree))
+;;        (match-tree tree
+;;                    ((empty)
+;;                     *undefined*)
+;;                    ((single x)
+;;                     (yield x))
+;;                    ((deep l sp r)
+;;                     (for-each yield l)
+;;                     (recurse (lambda (node)
+;;                                (match-node node
+;;                                            ((binary m x y)
+;;                                             (yield x)
+;;                                             (yield y))
+;;                                            ((trinary m x y z)
+;;                                             (yield x)
+;;                                             (yield y)
+;;                                             (yield z))))
+;;                              (force sp))
+;;                     (for-each-reverse yield r)))))))
+
 (define (finger-tree->generator tree)
-  (make-coroutine-generator
-   (lambda (yield)
-     (let recurse ((yield yield) (tree tree))
-       (match-tree tree
-                   ((empty)
-                    *undefined*)
-                   ((single x)
-                    (yield x))
-                   ((deep l sp r)
-                    (for-each yield l)
-                    (recurse (lambda (node)
-                               (match-node node
-                                           ((binary m x y)
-                                            (yield x)
-                                            (yield y))
-                                           ((trinary m x y z)
-                                            (yield x)
-                                            (yield y)
-                                            (yield z))))
-                             (force sp))
-                    (for-each-reverse yield r)))))))
+  (let ((k0 '(init)))
+    (match-tree tree
+      ((empty) (set! k0 eof-object))
+      ((single x) (set! k0 (lambda () (set! k0 eof-object) x)))
+      ((deep left0 spine0 right0)
+       (define (yield-node node k2)
+         (if (not (or (node3? node) (node2? node)))
+             (begin (set! k0 k2)
+                    node)
+             (match-node node
+               ((binary m x y)
+                (yield-node x (lambda () (yield-node y k2))))
+               ((trinary m x y z)
+                (yield-node x (lambda () (yield-node y (lambda () (yield-node z k2)))))))))
+       (define (yield-spine tree k2)
+         (match-tree tree
+           ((empty) (k2))
+           ((single node)
+            (yield-node node k2))
+           ((deep left1 spine1 right1)
+             (let loop0 ((left1 left1))
+               (if (null? left1)
+                   (yield-spine (force spine1)
+                                (lambda ()
+                                  (let loop1 ((right1 (reverse right1)))
+                                    (if (null? right1)
+                                        (k2)
+                                        (match-node (car right1)
+                                          ((binary m x y)
+                                           (yield-node x
+                                                       (lambda ()
+                                                         (yield-node y (lambda () (loop1 (cdr right1)))))))
+                                          ((trinary m x y z)
+                                           (yield-node x
+                                                       (lambda ()
+                                                         (yield-node y (lambda () (yield-node z (lambda () (loop1 (cdr right1))))))))))))))
+                   (yield-node (car left1) (lambda () (loop0 (cdr left1)))))))))
+
+       (set! k0
+             (lambda ()
+               (let loop0 ((left0 left0))
+                 (if (null? left0)
+                     (yield-spine (force spine0)
+                                  (lambda ()
+                                    (let loop1 ((right0 (reverse right0)))
+                                      (if (null? right0)
+                                          (begin (set! k0 eof-object)
+                                                 (eof-object))
+                                          (begin
+                                            (set! k0 (lambda () (loop1 (cdr right0))))
+                                            (car right0))))))
+                     (begin
+                       (set! k0 (lambda () (loop0 (cdr left0))))
+                       (car left0))))))))
+    (lambda ()
+      (k0))))
+
 
 (define (finger-tree->reverse-generator tree)
   (make-coroutine-generator
