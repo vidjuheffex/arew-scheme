@@ -7,7 +7,7 @@
    current-jiffy current-second jiffies-per-second)
   (import
    (rnrs)
-   (srfi srf-19))
+   (srfi srfi-19))
 
   (define scale 1000000000.0)
 
