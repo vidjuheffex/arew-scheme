@@ -1,6 +1,5 @@
 (define-library (arew data finger-tree check)
   (import
-   (only (chezscheme) syntax-case syntax datum->syntax with-syntax)
    (arew data finger-tree)
    (scheme generator)
    (scheme base)
@@ -1191,4 +1190,4 @@
     (define check-254
       (test-split t999))
 
-    )
+    ))
