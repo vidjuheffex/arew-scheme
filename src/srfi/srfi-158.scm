@@ -18,7 +18,8 @@
           string-accumulator bytevector-accumulator bytevector-accumulator!
           sum-accumulator product-accumulator)
 
-  (import (scheme base)
+  (import (only (chezscheme) call/1cc)
+          (scheme base)
           (scheme case-lambda))
 
   (define (any pred ls)
@@ -99,8 +100,8 @@
   (define (make-coroutine-generator proc)
     (define return #f)
     (define resume #f)
-    (define yield (lambda (v) (call/cc (lambda (r) (set! resume r) (return v)))))
-    (lambda () (call/cc (lambda (cc) (set! return cc)
+    (define yield (lambda (v) (call/1cc (lambda (r) (set! resume r) (return v)))))
+    (lambda () (call/1cc (lambda (cc) (set! return cc)
                                 (if resume
                                     (resume (if #f #f))  ; void? or yield again?
                                     (begin (proc yield)
