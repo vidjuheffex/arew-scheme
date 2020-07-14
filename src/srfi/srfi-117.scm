@@ -6,8 +6,8 @@
    list-queue-add-front! list-queue-add-back! list-queue-remove-front! list-queue-remove-back!
    list-queue-remove-all! list-queue-set-list!
    list-queue-append list-queue-append! list-queue-concatenate
-   list-queue-map list-queue-map! list-queue-for-each
-   )
+   list-queue-map list-queue-map! list-queue-for-each)
+
   (import
    (only (srfi srfi-23) error)
    (except (rnrs base) error)

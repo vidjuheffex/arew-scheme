@@ -22,6 +22,7 @@
    ;; * Conversion
    vector->list reverse-vector->list list->vector reverse-list->vector
    vector->string string->vector)
+
   (import (rename (rnrs)
                   (vector-fill! rnrs:vector-fill!)
                   (vector->list rnrs:vector->list)

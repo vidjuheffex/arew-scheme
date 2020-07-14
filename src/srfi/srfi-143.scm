@@ -12,6 +12,7 @@
     fxnot fxand fxior fxxor fxarithmetic-shift fxarithmetic-shift-left
     fxarithmetic-shift-right fxbit-count fxlength fxif fxbit-set? fxcopy-bit
     fxfirst-set-bit fxbit-field fxbit-field-rotate fxbit-field-reverse)
+
   (import (rnrs)
           (only (chezscheme) fxabs fxremainder fxquotient))
 
