@@ -103,6 +103,7 @@
   (cond
    ((pair? obj) (cons (annotations->datum (car obj))
                       (annotations->datum (cdr obj))))
+   ((vector? obj) (vector-map annotations->datum obj))
    ((annotation? obj) (annotations->datum (annotation-expression obj)))
    (else obj)))
 
