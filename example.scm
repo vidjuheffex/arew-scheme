@@ -1,5 +1,3 @@
-(import (scheme base))
-(import (scheme write))
+(import (chezscheme) (m))
 
-
-(display (string-append "hello" " " "world" "!\n"))
+(display magic)

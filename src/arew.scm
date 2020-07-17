@@ -134,7 +134,7 @@
   (define unique-var
     (let ((count 0))
       (lambda (name)
-        (let ([count* count])
+        (let ((count* count))
           (set! count (+ count 1))
           (string->symbol
            (string-append (symbol->string name) "." (number->string count*)))))))
@@ -153,7 +153,7 @@
      (lambda (name)
        (case (car name)
          ((chezscheme rnrs) name)
-         (else (list (unique-var 'library)))))))
+         (else (unique-var 'library))))))
 
   (define (import-rename spec)
     (let ((spec (maybe-annotation-expression spec)))
@@ -234,10 +234,10 @@
   (define (libraries-pack name)
     (call-with-values (lambda () (read-library name))
       (lambda (exports imports body)
-        `($library ,(rename name)
-                   (export ,@exports)
-                   (import ,@(map import-rename imports))
-                   ,@body))))
+        `($module ,(rename name) ()
+                  ($import ,@(map import-rename imports))
+                  ,@body
+                  (export ,@exports)))))
 
 
   (define (maybe-read-program filename-or-obj)
@@ -578,21 +578,16 @@ int run_program(int argc, const char **argv, const char *bootfilename, const cha
   (call-with-output-file "/tmp/test/program.scm"
     (lambda (port)
       (display "#!chezscheme\n" port)
-      (display "(import (prefix (only (chezscheme) begin library import) $))\n" port)
+      (display "(import (prefix (only (chezscheme) module begin import) $))\n" port)
       (pretty-print (annotations->datum (pack filename)) port)))
 
   (compile-imported-libraries #t)
   (generate-wpo-files #t)
 
-  (pk 'compile)
   (compile-program "/tmp/test/program.scm")
-  (pk 'wpo)
   (compile-whole-program "/tmp/test/program.wpo" "/tmp/test/program.chez" #t)
-  (pk 'test)
   (build-included-binary-file "/tmp/test/program.chez" "/tmp/test/program.chez.c" "scheme_program")
-  (pk 'eventually)
-  (system "cc -o example /tmp/test/boot.a /tmp/test/program.chez.c -m64 -ldl -lm -luuid -lpthread")
-  )
+  (system "cc -o example /tmp/test/boot.a /tmp/test/program.chez.c -m64 -ldl -lm -luuid -lpthread"))
 
 (match (cdr (command-line))
 ;;  (("editor" filename) (editor filename))

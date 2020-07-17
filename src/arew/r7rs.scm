@@ -1,3 +1,3 @@
 (library (arew r7rs)
-  (export begin import library)
+  (export begin import module)
   (import (chezscheme)))
