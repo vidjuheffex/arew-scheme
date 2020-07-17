@@ -1,21 +1,30 @@
 (import (only (chezscheme)
-              file-directory?
-              directory-list
-              compile-profile
-              profile-dump-html
-              expand
+              annotation-expression
               annotation?
-              pretty-print
-              import
+              bytevector->u8-list
+              compile-program
+              compile-whole-program
+              compile-imported-libraries
+              get-bytevector-all
+              compile-profile
               copy-environment
+              directory-list
               environment
               eval
-              make-source-file-descriptor
-              open-source-file
+              expand
+              file-directory?
+              format
+              generate-wpo-files
               get-datum/annotations
+              import
+              make-boot-file
+              make-source-file-descriptor
               open-file-input-port
-              annotation-expression
+              open-source-file
+              pretty-print
+              profile-dump-html
               source-directories
+              system
               with-source-path))
 
 (import (scheme base))
@@ -401,10 +410,195 @@
       (eval* program)
       (profile-dump-html "profile/"))))
 
+(define (compile filename)
+
+  (define stubs "int setupterm(char *term, int fd, int *errret) {
+	return 0;
+}
+
+int tputs(const char *str, int affcnt, int (*putc)(int)) {
+	return 0;
+}
+
+void *cur_term;")
+
+  (define embed
+    "#include <assert.h>
+#include <fcntl.h>
+#include <errno.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+
+#include <scheme.h>
+
+extern const char chezschemebootfile;
+extern const unsigned chezschemebootfile_size;
+extern const char scheme_program;
+extern const unsigned scheme_program_size;
+
+extern int run_program(int argc, const char **argv, const char *bootfilename, const char *schemefilename);
+
+char bootfilename[] = \"/tmp/chezschemebootXXXXXX\";
+char schemefilename[] = \"/tmp/schemeprogramXXXXXX\";
+const char *cleanup_bootfile = 0;
+const char *cleanup_schemefile = 0;
+
+void cleanup(void) {
+	if (cleanup_bootfile) unlink(bootfilename);
+	if (cleanup_schemefile) unlink(schemefilename);
+}
+
+int maketempfile(char *template, const char *contents, size_t size) {
+	int fd;
+	fd = mkstemp(template);
+	assert(fd >= 0);
+
+	assert(write(fd, contents, size) == size);
+	assert(lseek(fd, 0, SEEK_SET) == 0);
+	return fd;
+}
+
+int main(int argc, const char **argv) {
+	int bootfd;
+	int schemefd;
+	int ret;
+
+	atexit(cleanup);
+
+	bootfd = maketempfile(bootfilename, &chezschemebootfile, chezschemebootfile_size);
+	cleanup_bootfile = bootfilename;
+	schemefd = maketempfile(schemefilename, &scheme_program, scheme_program_size);
+	cleanup_schemefile = schemefilename;
+
+	ret = run_program(argc, argv, bootfilename, schemefilename);
+
+	close(bootfd);
+	close(schemefd);
+
+	return ret;
+}")
+
+  (define setup "
+#include <scheme.h>
+
+extern const char chezschemebootfile;
+extern const unsigned chezschemebootfile_size;
+extern const char scheme_program;
+extern const unsigned scheme_program_size;
+
+extern int run_program(int argc, const char **argv, const char *bootfilename, const char *schemefilename);
+
+static const char *argv0;
+
+const char *program_name(void) {
+	return argv0;
+}
+
+void custom_init(void) {
+	Sregister_symbol(\"program_name\", (void*)program_name);
+}
+
+int run_program(int argc, const char **argv, const char *bootfilename, const char *schemefilename) {
+	argv0 = argv[0];
+	Sscheme_init(0);
+	Sregister_boot_file(bootfilename);
+	Sbuild_heap(0, custom_init);
+	return Sscheme_program(schemefilename, argc, argv);
+}
+")
+
+  (define base-boot
+    '(let ([program-name
+            (foreign-procedure "program_name" () string)])
+
+       (scheme-program
+        (lambda (fn . fns)
+          (command-line (cons (program-name) fns))
+          (command-line-arguments fns)
+          (load-program fn)))))
+
+  (define (build-included-binary-file input output symbol-name)
+    (call-with-output-file output
+      (lambda (port)
+        (let ([data (bytevector->u8-list
+                     (get-bytevector-all (open-file-input-port input)))])
+          (format port "#include <stdint.h>~n")
+          (format port "const uint8_t ~a[] = {~{0x~x,~}};~n" symbol-name data)
+          (format port "const unsigned int ~a_size = sizeof(~a);~n" symbol-name symbol-name)))))
+
+  (define (expand* obj)
+    (let ((env (copy-environment (environment '(prefix (arew r7rs) $)))))
+      (expand obj env)))
+
+  ;; shared
+
+  (call-with-output-file "/tmp/test/stubs.c"
+    (lambda (port)
+      (display stubs port)))
+
+  (call-with-output-file "/tmp/test/embed.c"
+    (lambda (port)
+      (display embed port)))
+
+  (call-with-output-file "/tmp/test/setup.c"
+    (lambda (port)
+      (display setup port)))
+
+  (call-with-output-file "/tmp/test/base-boot.scm"
+    (lambda (port)
+      (write base-boot port)))
+
+  (system "cc -c -o /tmp/test/stubs.o /tmp/test/stubs.c")
+
+  (system "cc -c -o /tmp/test/embed.o /tmp/test/embed.c -I/usr/lib/csv9.5.3/ta6le/ -m64")
+
+  (system "cc -c -o /tmp/test/setup.o /tmp/test/setup.c -I/usr/lib/csv9.5.3/ta6le/ -m64")
+
+  (make-boot-file "/tmp/test/program.boot"
+                  '()
+                  "/usr/lib/csv9.5.3/ta6le/scheme.boot"
+                  "/tmp/test/base-boot.scm")
+
+  (call-with-output-file "/tmp/test/program.c"
+    (lambda (port)
+      (let ((data (bytevector->u8-list
+                   (get-bytevector-all (open-file-input-port "/tmp/test/program.boot")))))
+        (format port "#include <stdint.h>~n")
+        (format port "const uint8_t ~a[] = {~{0x~x,~}};~n" "chezschemebootfile" data)
+        (format port "const unsigned int ~a_size = sizeof(~a);~n" "chezschemebootfile" "chezschemebootfile"))))
+
+  (system "cc -c -o /tmp/test/program.o /tmp/test/program.c -m64")
+
+  (system "ar rcs /tmp/test/boot.a /tmp/test/embed.o /tmp/test/setup.o /tmp/test/stubs.o /tmp/test/program.o /usr/lib/csv9.5.3/ta6le//kernel.o")
+
+  ;; specific
+
+  (call-with-output-file "/tmp/test/program.scm"
+    (lambda (port)
+      (display "#!chezscheme\n" port)
+      (display "(import (prefix (only (chezscheme) begin library import) $))\n" port)
+      (pretty-print (annotations->datum (pack filename)) port)))
+
+  (compile-imported-libraries #t)
+  (generate-wpo-files #t)
+
+  (pk 'compile)
+  (compile-program "/tmp/test/program.scm")
+  (pk 'wpo)
+  (compile-whole-program "/tmp/test/program.wpo" "/tmp/test/program.chez" #t)
+  (pk 'test)
+  (build-included-binary-file "/tmp/test/program.chez" "/tmp/test/program.chez.c" "scheme_program")
+  (pk 'eventually)
+  (system "cc -o example /tmp/test/boot.a /tmp/test/program.chez.c -m64 -ldl -lm -luuid -lpthread")
+  )
+
 (match (cdr (command-line))
 ;;  (("editor" filename) (editor filename))
   (("eval" filename) (eval* filename))
   (("expand" filename) (expand* filename))
   (("print" filename) (print filename))
   (("check" filename) (check filename))
+  (("compile" filename) (compile filename))
   (else (display "unknown subcommand.\n")))
