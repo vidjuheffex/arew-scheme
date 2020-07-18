@@ -1,3 +1,3 @@
-(import (chezscheme) (m))
+(import (scheme base))
 
-(display magic)
+(pk "hello world")
