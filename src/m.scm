@@ -1,6 +1,6 @@
 (library (m)
   (export (rename (thruth magic)) lll foobar)
-  (import (except (chezscheme) define) (arew help))
+  (import (except (chezscheme) define) (arew base))
 
   (define thruth "test doc" 101)
 
@@ -8,6 +8,7 @@
     (lambda ()
       42))
 
-  (define (foobar)
+  (define (foobar abc)
     "documentation for the win"
+    (assume (number? abc) foobar)
     101))
