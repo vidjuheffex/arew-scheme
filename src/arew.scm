@@ -1,7 +1,12 @@
-(import (except (chezscheme) remove member))
+(import (rename (except (chezscheme) remove member)
+                (error cs:error)))
 (import (prefix (rnrs) r6:))
 (import (arew matchable))
 
+(define (error message . irritants)
+  (if (and (symbol? message) (pair? irritants) (string? (car irritants)))
+      (apply cs:error message irritants)
+      (apply cs:error #f message irritants)))
 
 ;; srfi-1 (scheme list) helpers
 
