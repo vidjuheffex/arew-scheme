@@ -1,8 +1,7 @@
 ;; -*- mode: scheme; coding: utf-8 -*-
 ;; Copyright © 2018 Göran Weinholt <goran@weinholt.se>
+;; Copyright © 2020 Amirouche BOUBEKKI <amirouche@hyper.dev>
 ;; SPDX-License-Identifier: CC0-1.0
-#!r6rs
-
 (library (scheme char)
   (export
     char-alphabetic? char-ci<=? char-ci<? char-ci=? char-ci>=?
@@ -11,9 +10,7 @@
     digit-value string-ci<=? string-ci<? string-ci=?
     string-ci>=? string-ci>? string-downcase string-foldcase
     string-upcase)
-  (import
-    (rnrs)
-    (only (srfi srfi-43) vector-binary-search))
+  (import (chezscheme))
 
 ;; The table can be extracted with:
 ;; awk -F ';' '/ZERO;Nd/ {print "#x"$1}' UnicodeData.txt
@@ -27,6 +24,55 @@
   #x111D0 #x112F0 #x11450 #x114D0 #x11650 #x116C0 #x11730 #x118E0
   #x11C50 #x11D50 #x11DA0 #x16A60 #x16B50 #x1D7CE #x1D7D8 #x1D7E2
   #x1D7EC #x1D7F6 #x1E950))
+
+(define (vector-parse-start+end vec args start-name end-name callee)
+  (let ((len (vector-length vec)))
+    (cond ((null? args)
+           (values 0 len))
+          ((null? (cdr args))
+           (check-indices vec
+                          (car args) start-name
+                          len end-name
+                          callee))
+          ((null? (cddr args))
+           (check-indices vec
+                          (car  args) start-name
+                          (cadr args) end-name
+                          callee))
+          (else
+           (error "too many arguments"
+                  `(extra args were ,(cddr args))
+                  `(while calling ,callee))))))
+
+(define-syntax let-vector-start+end
+  (syntax-rules ()
+    ((let-vector-start+end ?callee ?vec ?args (?start ?end)
+       ?body1 ?body2 ...)
+     (let ((?vec (check-type vector? ?vec ?callee)))
+       (call-with-values (lambda () (vector-parse-start+end ?vec
+                                                            ?args
+                                                            '?start
+                                                            '?end
+                                                            ?callee))
+         (lambda (?start ?end)
+           ?body1 ?body2 ...))))))
+
+;; TODO: avoid the let-vector-start+end macro
+(define (vector-binary-search vec value cmp . maybe-start+end)
+  (let ((cmp (check-type procedure? cmp vector-binary-search)))
+    (let-vector-start+end vector-binary-search vec maybe-start+end
+                          (start end)
+      (let loop ((start start) (end end) (j #f))
+        (let ((i (quotient (+ start end) 2)))
+          (if (or (= start end) (and j (= i j)))
+              #f
+              (let ((comparison
+                     (check-type integer?
+                                 (cmp (vector-ref vec i) value)
+                                 `(,cmp for ,vector-binary-search))))
+                (cond ((zero?     comparison) i)
+                      ((positive? comparison) (loop start i i))
+                      (else                   (loop i end i))))))))))
 
 (define (digit-value char)
   (define (cmp zero ch)
