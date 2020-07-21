@@ -37,13 +37,13 @@
    read-line read-string read-u8 real? remainder reverse round set!
    set-car! set-cdr! square string string->list string->number
    string->symbol string->utf8 string->vector string-append
-   string-copy string-copy! string-fill! string-for-each
+   string-copy #;string-copy! string-fill! string-for-each
    string-length string-map string-ref string-set! string<=? string<?
    string=? string>=? string>? string? substring symbol->string
    symbol=? symbol? syntax-error syntax-rules textual-port? truncate
    truncate-quotient truncate-remainder truncate/ u8-ready? unless
    unquote unquote-splicing utf8->string values vector vector->list
-   vector->string vector-append vector-copy vector-copy! vector-fill!
+   vector->string vector-append vector-copy #;vector-copy! vector-fill!
    vector-for-each vector-length vector-map vector-ref vector-set!
    vector? when with-exception-handler write-bytevector write-char
    write-string write-u8 zero?)
@@ -74,10 +74,10 @@
           (only (srfi srfi-1) map for-each member assoc make-list list-copy)
           (srfi srfi-6)
           (srfi srfi-9)
-          (only (srfi srfi-13) string-copy!)
+          ;;(only (srfi srfi-13) string-copy!)
           (srfi srfi-39)
-          (only (srfi srfi-43) vector-copy!)
-          (only (chezscheme) include))
+          #;(only (srfi srfi-43) vector-copy!)
+          )
 
   (begin
 
@@ -133,6 +133,12 @@
   ;;   http://srfi.schemers.org/srfi-93/mail-archive/msg00024.html
   (define-syntax syntax-rules
     (lambda (x)
+      (define (map proc lst)
+        (let loop ((lst lst)
+                   (out '()))
+          (if (null? lst)
+              (reverse out)
+              (loop (cdr lst) (cons (proc (car lst)) out)))))
       ;; filt and emap handle ellipsis in the patterns
       (define (filt elip x)
         (if (identifier? x)

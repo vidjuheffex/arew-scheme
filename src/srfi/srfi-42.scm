@@ -15,7 +15,7 @@
     (rnrs r5rs)
     (srfi srfi-39)
     (srfi srfi-23 tricks)
-    (for (srfi private vanish) expand)
+    (srfi private vanish)
     (srfi private include))
 
   (define-syntax :-dispatch
@@ -24,8 +24,7 @@
       ((set! _ expr) (:-dispatch-param expr))))
 
   (let-syntax ((define (vanish-define define (:-dispatch))))
-    (SRFI-23-error->R6RS "(library (srfi :42 eager-comprehensions))"
-     (include/resolve ("srfi" "srfi-42") "srfi-42-body.scm")))
+     (include/resolve ("srfi" "srfi-42") "srfi-42-body.scm"))
 
   (define :-dispatch-param (make-parameter (make-initial-:-dispatch)))
 )

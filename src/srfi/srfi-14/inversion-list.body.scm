@@ -1,7 +1,7 @@
 ; Part of Scheme 48 1.9.  See file COPYING for notices and license.
 
 ; Authors: Mike Sperber
-; Copyright (c) 2005-2006 by Basis Technology Corporation. 
+; Copyright (c) 2005-2006 by Basis Technology Corporation.
 
 ; Inversion lists are representations for sets of integers,
 ; represented as sorted sets of ranges.
@@ -12,7 +12,7 @@
 ; This was written as support code for the implementation of SRFI 14,
 ; which is why there's so many exports here nobody really needs.
 
-(define-record-type inversion-list :inversion-list 
+(define-record-type inversion-list :inversion-list
   (make-inversion-list min max
 		       range-vector)
   inversion-list?
@@ -166,7 +166,7 @@
   (binary->n-ary
    (make-inversion-list-union/intersection (lambda () inversion-list-union)
 					   0 1 even? odd? -1 0)))
-   
+
 
 (define inversion-list-intersection
   (binary->n-ary
@@ -181,13 +181,13 @@
 
 (define (number->inversion-list min max n)
   (if (or (< n min)
-	  (>= n max))
+          (>= n max))
       (assertion-violation 'number->inversion-list "invalid number"
-			   min max n))
+                           min max n))
   (make-inversion-list min max
-		       (if (= n (- max 1))
-			   (vector n)
-			   (vector n (+ n 1)))))
+                       (if (= n (- max 1))
+                           (vector n)
+                           (vector n (+ n 1)))))
 
 (define (numbers->inversion-list min max . numbers)
   (cond
@@ -368,5 +368,3 @@
 	 (copy (make-vector size)))
     (vector-copy! v 0 copy 0 size)
     copy))
-
-

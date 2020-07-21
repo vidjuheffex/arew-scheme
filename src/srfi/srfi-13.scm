@@ -66,6 +66,5 @@
   (define (char-cased? c)
     (char-upper-case? (char-upcase c)))
 
-  (SRFI-23-error->R6RS "(library (srfi srfi-13))"
-   (include/resolve ("srfi" "srfi-13") "srfi-13.body.scm"))
+  (include/resolve ("srfi" "srfi-13") "srfi-13.body.scm")
 )

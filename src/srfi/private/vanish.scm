@@ -1,20 +1,11 @@
-#!r6rs
 ;; Copyright 2009 Derick Eddington.  My MIT-style license is in the file named
 ;; LICENSE from the original collection this file is distributed with.
 
 (library (srfi private vanish)
   (export
-    vanish-define)
+    vanish-define make-vanish-define)
   (import
-    (chezscheme)
-    (for (only (rnrs base) begin) (meta -1)))
-
-  (define-syntax vanish-define
-    (lambda (stx)
-      (syntax-case stx ()
-        ((_ def (vanish ...))
-         (for-all identifier? #'(def vanish ...))
-         #'(make-vanish-define (syntax def) (syntax vanish) ...)))))
+    (chezscheme))
 
   (define (make-vanish-define def . to-vanish)
     (lambda (stx)
@@ -32,4 +23,10 @@
          #'(begin))
         ((_ . r)
          (cons def #'r)))))
-)
+
+  (define-syntax vanish-define
+    (lambda (stx)
+      (syntax-case stx ()
+        ((_ def (vanish ...))
+         (for-all identifier? #'(def vanish ...))
+         #'(make-vanish-define (syntax def) (syntax vanish) ...))))))

@@ -90,7 +90,7 @@
     (rnrs mutable-strings)
     (prefix (srfi srfi-19 compat) host:)
     (srfi srfi-6)
-    (for (srfi private vanish) expand)
+    (srfi private vanish)
     (srfi private include))
 
   (define-syntax define-struct

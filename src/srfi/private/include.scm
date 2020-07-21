@@ -1,4 +1,3 @@
-#!r6rs
 ;; Copyright 2009 Derick Eddington.  My MIT-style license is in the file named
 ;; LICENSE from the original collection this file is distributed with.
 
@@ -6,11 +5,15 @@
   (export
     include/resolve)
   (import
-    (chezscheme)
-    (for (srfi private include compat) expand))
+    (chezscheme))
+
 
   (define-syntax include/resolve
     (lambda (stx)
+      (define (search-paths)
+        (fold-left (lambda (ls as) (cons (car as) ls))
+                   (source-directories) (library-directories)))
+
       (define (include/lexical-context ctxt filename)
         (with-exception-handler
           (lambda (ex)

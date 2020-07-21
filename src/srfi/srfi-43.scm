@@ -39,7 +39,7 @@
     (rnrs r5rs)
     (srfi srfi-23 tricks)
     (srfi srfi-8)
-    (for (srfi private vanish) expand)
+    (srfi private vanish)
     (srfi private include))
 
   ;; I do these let-syntax tricks so the original vector-lib.scm file does
@@ -65,6 +65,5 @@
        (define-syntax
         (vanish-define define-syntax
          (receive))))
-    (SRFI-23-error->R6RS "(library (srfi :43 vectors))"
-     (include/resolve ("srfi" "srfi-43") "srfi-43.body.scm")))
+    (include/resolve ("srfi" "srfi-43") "srfi-43.body.scm"))
 )

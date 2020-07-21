@@ -16,7 +16,7 @@
 
 (library (srfi private include compat)
   (export search-paths)
-  (import (rnrs) (only (chezscheme) source-directories library-directories))
+  (import (chezscheme))
 
   (define (search-paths)
     (fold-left (lambda (ls as) (cons (car as) ls))

@@ -40,12 +40,22 @@
     (except (rnrs) define-record-type)
     (rnrs mutable-strings)
     (rnrs r5rs)
-    (rename (only (srfi srfi-1) partition)
-            (partition partition-list))
     (srfi srfi-9)
     (srfi private include)
     (srfi private let-opt)
     (srfi srfi-14 inversion-list))
+
+  (define (partition-list pred lis)
+    (let recur ((lis lis))
+      (if (list? lis) (values lis lis)       ; Use NOT-PAIR? to handle dotted lists.
+          (let ((elt (car lis))
+                (tail (cdr lis)))
+            (call-with-values (lambda ()  (recur tail))
+              (lambda (in out)
+                (if (pred elt)
+                    (values (if (pair? out) (cons elt in) lis) out)
+                    (values in (if (pair? in) (cons elt out) lis)))))))))
+
 
   (define-syntax define-record-discloser
     (syntax-rules ()

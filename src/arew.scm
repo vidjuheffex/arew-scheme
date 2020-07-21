@@ -1,45 +1,206 @@
-(import (only (chezscheme)
-              annotation-expression
-              annotation?
-              bytevector->u8-list
-              compile-program
-              compile-whole-program
-              compile-imported-libraries
-              get-bytevector-all
-              compile-profile
-              copy-environment
-              directory-list
-              environment
-              eval
-              expand
-              file-directory?
-              format
-              generate-wpo-files
-              get-datum/annotations
-              import
-              make-boot-file
-              make-source-file-descriptor
-              open-file-input-port
-              open-source-file
-              pretty-print
-              profile-dump-html
-              source-directories
-              system
-              with-source-path))
-
-(import (scheme base))
-(import (scheme list))
-(import (scheme file))
-(import (scheme read))
-(import (scheme process-context))
-(import (scheme write))
-(import (scheme hash-table))
-(import (scheme comparator))
-(import (srfi srfi-145))
+(import (except (chezscheme) remove member))
+(import (prefix (rnrs) r6:))
 (import (arew matchable))
-;; (import (arew editor))
+
+
+;; srfi-1 (scheme list) helpers
+
+(define member
+  (case-lambda
+    ((x lis)
+     (r6:member x lis))
+    ((x lis elt=)
+     (let lp ((lis lis))
+       (and (not (null? lis))
+            (if (elt= x (car lis)) lis
+                (lp (cdr lis))))))))
+
+(define (%cars+cdrs lists)
+  (let f ((ls lists))
+    (if (pair? ls)
+        (let ((x (car ls)))
+          (if (null? x)
+              (values '() '())
+              (receive (cars cdrs) (f (cdr ls))
+                (values (cons (car x) cars)
+                        (cons (cdr x) cdrs)))))
+        (values '() '()))))
+
+(define every
+  (case-lambda
+    ;; Fast path 1
+    ((pred lis1)
+     (or (null? lis1)
+         (let loop ((head (car lis1)) (tail (cdr lis1)))
+           (if (null? tail)
+               (pred head)              ; Last PRED app is tail call.
+               (and (pred head) (loop (car tail) (cdr tail)))))))
+    ;; Fast path 2
+    ((pred lis1 lis2)
+     (or (null? lis1) (null? lis2)
+         (let loop ((head1 (car lis1)) (tail1 (cdr lis1))
+                    (head2 (car lis2)) (tail2 (cdr lis2)))
+           (if (or (null? tail1) (null? tail2))
+               (pred head1 head2)       ; Last PRED app is tail call.
+               (and (pred head1 head2)
+                    (loop (car tail1) (cdr tail1)
+                          (car tail2) (cdr tail2)))))))
+    ;; N-ary case
+    ((pred lis1 lis2 . lists)
+     (or (null? lis1) (null? lis2)
+         (receive (heads tails) (%cars+cdrs lists)
+           (or (not (pair? heads))
+               (let loop ((head1 (car lis1)) (tail1 (cdr lis1))
+                          (head2 (car lis2)) (tail2 (cdr lis2))
+                          (heads heads) (tails tails))
+                 (if (or (null? tail1) (null? tail2))
+                     (apply pred head1 head2 heads)
+                                        ; Last PRED app is tail call.
+                     (receive (next-heads next-tails) (%cars+cdrs tails)
+                       (if (null? next-tails)
+                           (apply pred head1 head2 heads)
+                                        ; Last PRED app is tail call.
+                           (and (apply pred head1 head2 heads)
+                                (loop (car tail1) (cdr tail1)
+                                      (car tail2) (cdr tail2)
+                                      next-heads next-tails))))))))))))
+
+(define (remove pred lis)
+  (let recur ((lis lis))
+    (if (null? lis) lis
+        (let ((head (car lis))
+              (tail (cdr lis)))
+          (if (not (pred head))
+              (let ((new-tail (recur tail)))
+                (if (eq? tail new-tail) lis
+                    (cons head new-tail)))
+              (recur tail))))))
+
+(define lset-difference
+  (case-lambda
+    ((= lis1) lis1)
+    ((= lis1 lis2)
+     (cond
+      ((null? lis2) lis1)
+      ((or (null? lis1) (eq? lis1 lis2))
+       '())
+      (else (filter (lambda (x) (not (member x lis2 =))) lis1))))
+    ((= lis1 lis2 lis3 . lists)
+     (cond
+      ;; Short cut
+      ((or (null? lis1) (eq? lis1 lis2) (eq? lis1 lis3)
+           (memq lis1 lists))
+       '())
+      ;; Throw out lis2 (or lis3) if it is nil
+      ((null? lis2)
+       (if (null? lis3)
+           (apply lset-difference lis1 lists)
+           (apply lset-difference lis1 lis3 lists)))
+      ;; Throw out lis3 if it is lis2 or nil
+      ((or (null? lis3) (eq? lis3 lis2))
+       (apply lset-difference lis1 lis2 lists))
+      ;; Real procedure
+      (else
+       (let ((lists (remove (lambda (lis)
+                              (or (null? lis) (eq? lis lis2) (eq? lis lis3)))
+                            lists))) ; Remove nil, lis2 and lis3
+         (filter (lambda (x)
+                   (and (not (member x lis2 =))
+                        (not (member x lis3 =))
+                        (every (lambda (lis) (not (member x lis =)))
+                               lists)))
+                 lis1)))))))
+
+(define-syntax receive
+  (syntax-rules ()
+    ((_ formals expression b b* ...)
+     (call-with-values
+         (lambda () expression)
+       (lambda formals b b* ...)))))
+
+(define append-map
+  (case-lambda
+    ((f lis1)
+     (really-append-map append-map  append  f lis1))
+    ((f lis1 lis2)
+     (really-append-map append-map  append  f lis1 lis2))
+    ((f lis1 lis2 . lists)
+     (really-append-map append-map  append  f lis1 lis2 lists))))
+
+(define really-append-map
+  (case-lambda
+    ;; Fast path 1
+    ((who appender f lis1)
+     (if (null? lis1) '()
+         (let recur ((elt (car lis1)) (rest (cdr lis1)))
+           (let ((vals (f elt)))
+             (if (null? rest) vals
+                 (appender vals (recur (car rest) (cdr rest))))))))
+    ;; Fast path 2
+    ((who appender f lis1 lis2)
+     (if (or (null? lis1) (null? lis2))
+         '()
+         (let recur ((lis1 lis1) (lis2 lis2))
+           (let ((vals (f (car lis1) (car lis2)))
+                 (lis1 (cdr lis1)) (lis2 (cdr lis2)))
+             (if (or (null? lis1) (null? lis2))
+                 vals
+                 (appender vals (recur lis1 lis2)))))))
+    ;; N-ary case
+    ((who appender f lis1 lis2 lists)
+     (if (or (null? lis1) (null? lis2))
+         '()
+         (receive (cars cdrs) (%cars+cdrs lists)
+           (if (null? cars) '()
+               (let recur ((lis1 lis1) (lis2 lis2)
+                           (cars cars) (cdrs cdrs))
+                 (let ((vals (apply f (car lis1) (car lis2) cars))
+                       (lis1 (cdr lis1)) (lis2 (cdr lis2)))
+                   (if (or (null? lis1) (null? lis2))
+                       vals
+                       (receive (cars2 cdrs2) (%cars+cdrs cdrs)
+                         (if (null? cars2) vals
+                             (appender vals (recur lis1 lis2 cars2 cdrs2)))))))))))))
+
+(define delete
+  (case-lambda
+    ((x lis)
+     (delete x lis equal?))
+    ((x lis elt=)
+     (let recur ((lis lis))
+       (if (list? lis) lis
+           (let ((head (car lis))
+                 (tail (cdr lis)))
+             (if (not (elt= x head))
+                 (let ((new-tail (recur tail)))
+                   (if (eq? tail new-tail) lis
+                       (cons head new-tail)))
+                 (recur tail))))))))
+
+(define delete-duplicates
+  (case-lambda
+    ((lis)
+     (delete-duplicates lis equal?))
+    ((lis elt=)
+     (let recur ((lis lis))
+       (if (null? lis) lis
+           (let* ((x (car lis))
+                  (tail (cdr lis))
+                  (new-tail (recur (delete x tail elt=))))
+             (if (eq? tail new-tail) lis (cons x new-tail))))))))
 
 ;; helpers
+
+(define (read-filename filename)
+  (define port (open-file-input-port filename))
+  (define sfd (make-source-file-descriptor filename port))
+  (define source (open-source-file sfd))
+  (let loop ((out '()))
+    (call-with-values (lambda () (get-datum/annotations source sfd 0))
+      (lambda (object _)
+        (if (eof-object? object)
+            (reverse out)
+            (loop (cons object out)))))))
 
 (define (topological-sort dependencies)
 
@@ -95,7 +256,7 @@
 
 
 (define %arew-path
-  (get-environment-variable "AREW_PATH"))
+  (getenv "AREW_PATH"))
 
 (source-directories (list %arew-path "."))
 
@@ -237,7 +398,7 @@
         `($module ,(rename name) ()
                   ($import ,@(map import-rename imports))
                   ,@body
-                  (export ,@exports)))))
+                  ($export ,@exports)))))
 
 
   (define (maybe-read-program filename-or-obj)
@@ -265,8 +426,8 @@
   (pretty-print (annotations->datum (pack filename))))
 
 (define (eval* obj)
-  (let ((env (copy-environment (environment '(prefix (arew r7rs) $)))))
-    (eval (pack obj) env)))
+  (define env (copy-environment (environment '(prefix (arew r7rs) $)) #t))
+  (eval (pack obj) env))
 
 (define (expand* filename)
   (let ((env (copy-environment (environment '(prefix (arew r7rs) $)))))
@@ -410,7 +571,7 @@
       (eval* program)
       (profile-dump-html "profile/"))))
 
-(define (compile filename)
+(define (compile* filename)
 
   (define stubs "int setupterm(char *term, int fd, int *errret) {
 	return 0;
@@ -577,9 +738,12 @@ int run_program(int argc, const char **argv, const char *bootfilename, const cha
 
   (call-with-output-file "/tmp/test/program.scm"
     (lambda (port)
-      (display "#!chezscheme\n" port)
-      (display "(import (prefix (only (chezscheme) module begin import) $))\n" port)
-      (pretty-print (annotations->datum (pack filename)) port)))
+      (write '(import (prefix (arew r7rs) $)) port)
+      (newline port)
+      (let loop ((program (cdr (pack filename))))
+        (unless (null? program)
+          (pretty-print (annotations->datum (car program)) port)
+          (loop (cdr program))))))
 
   (compile-imported-libraries #t)
   (generate-wpo-files #t)
@@ -595,5 +759,5 @@ int run_program(int argc, const char **argv, const char *bootfilename, const cha
   (("expand" filename) (expand* filename))
   (("print" filename) (print filename))
   (("check" filename) (check filename))
-  (("compile" filename) (compile filename))
+  (("compile" filename) (compile* filename))
   (else (display "unknown subcommand.\n")))

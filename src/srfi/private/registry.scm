@@ -9,8 +9,7 @@
     available-features)
   (import
     (rnrs)
-    (for (prefix (srfi private platform-features) platform-)
-         run expand))
+    (prefix (srfi private platform-features) platform-))
 
   (define-syntax make-expand-time-features
     (lambda (_)
