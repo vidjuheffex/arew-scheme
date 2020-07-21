@@ -9,7 +9,7 @@
   (export
     check-arg)
   (import
-    (rnrs))
+    (chezscheme))
 
 #;(define (check-arg pred val who)
     (if (pred val)

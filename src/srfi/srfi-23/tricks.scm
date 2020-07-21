@@ -6,7 +6,7 @@
   (export
     SRFI-23-error->R6RS)
   (import
-    (rnrs))
+    (chezscheme))
 
   (define-syntax error-wrap
     (lambda (stx)

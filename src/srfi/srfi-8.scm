@@ -4,7 +4,7 @@
 
 (library (srfi srfi-8)
   (export receive)
-  (import (rnrs))
+  (import (chezscheme))
 
   (define-syntax receive
     (syntax-rules ()

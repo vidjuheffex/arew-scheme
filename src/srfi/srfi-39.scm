@@ -17,4 +17,4 @@
 (library (srfi srfi-39)
   (export make-parameter
           parameterize)
-  (import (only (chezscheme) make-parameter parameterize)))
+  (import (chezscheme)))

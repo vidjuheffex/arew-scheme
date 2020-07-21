@@ -6,7 +6,7 @@
   (export
     vanish-define)
   (import
-    (rnrs)
+    (chezscheme)
     (for (only (rnrs base) begin) (meta -1)))
 
   (define-syntax vanish-define

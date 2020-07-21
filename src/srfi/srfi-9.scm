@@ -6,7 +6,7 @@
   (export
     (rename (my:define-record-type define-record-type)))
   (import
-    (rnrs))
+    (chezscheme))
 
   (define-syntax my:define-record-type
     (lambda (stx)

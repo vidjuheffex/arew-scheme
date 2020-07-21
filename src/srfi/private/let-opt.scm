@@ -37,7 +37,7 @@
   (export
     let-optionals* :optional)
   (import
-    (rename (except (rnrs) error) (assertion-violation error)))
+    (rename (except (chezscheme) error) (assertion-violation error)))
 
 ;;; (:optional rest-arg default-exp [test-pred])
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

@@ -6,7 +6,7 @@
   (export
     include/resolve)
   (import
-    (rnrs)
+    (chezscheme)
     (for (srfi private include compat) expand))
 
   (define-syntax include/resolve
