@@ -1,7 +1,5 @@
 ;; -*- mode: scheme; coding: utf-8 -*-
 ;; SPDX-License-Identifier: CC0-1.0
-#!r6rs
-
 (library (scheme file)
   (export
     call-with-input-file call-with-output-file delete-file file-exists?
@@ -9,7 +7,7 @@
     open-input-file open-output-file with-input-from-file
     with-output-to-file)
   (import
-    (rnrs))
+    (chezscheme))
 
 (define (open-binary-input-file file)
   (open-file-input-port file))
