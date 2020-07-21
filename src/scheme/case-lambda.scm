@@ -4,4 +4,4 @@
 
 (library (scheme case-lambda)
   (export case-lambda)
-  (import (rnrs)))
+  (import (chezscheme)))
