@@ -8,4 +8,4 @@
     caddar cadddr caddr cdaaar cdaadr cdaar cdadar cdaddr cdadr
     cddaar cddadr cddar cdddar cddddr cdddr)
   (import
-    (rnrs)))
+    (chezscheme)))
