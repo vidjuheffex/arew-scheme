@@ -1,4 +1,4 @@
-c(import (scheme base))
+(import (scheme base))
 
 (let loop ((index 100))
   (unless (zero? index)
