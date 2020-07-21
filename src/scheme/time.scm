@@ -1,13 +1,9 @@
 ;; -*- mode: scheme; coding: utf-8 -*-
 ;; SPDX-License-Identifier: CC0-1.0
-#!r6rs
-
 (library (scheme time)
   (export
    current-jiffy current-second jiffies-per-second)
-  (import
-   (rnrs)
-   (srfi srfi-19))
+  (import (chezscheme))
 
   (define scale 1000000000.0)
 
