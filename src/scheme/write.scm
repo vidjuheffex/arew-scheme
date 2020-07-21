@@ -1,15 +1,9 @@
 ;; -*- mode: scheme; coding: utf-8 -*-
 ;; Copyright © 2018 Göran Weinholt <goran@weinholt.se>
 ;; SPDX-License-Identifier: CC0-1.0
-#!r6rs
-
-;; TODO: Get a writer that outputs with R7RS syntax.
-
 (library (scheme write)
-  (export
-    display write write-shared write-simple)
-  (import
-    (chezscheme))
+  (export display write write-shared write-simple)
+  (import (chezscheme))
 
   (define write-shared
     (case-lambda
