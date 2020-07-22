@@ -1,4 +1,4 @@
-(define-library (srfi srfi-143-check)
+(define-library (srfi srfi-143 check)
 
   (export check-00 check-01 check-02 check-03 check-04 check-05
 check-06 check-07 check-08 check-09 check-10 check-11 check-12

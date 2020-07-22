@@ -13,8 +13,7 @@
     fxarithmetic-shift-right fxbit-count fxlength fxif fxbit-set? fxcopy-bit
     fxfirst-set-bit fxbit-field fxbit-field-rotate fxbit-field-reverse)
 
-  (import (rnrs)
-          (only (chezscheme) fxabs fxremainder fxquotient))
+  (import (chezscheme))
 
   (define fx-width (fixnum-width))
   (define fx-greatest (greatest-fixnum))
