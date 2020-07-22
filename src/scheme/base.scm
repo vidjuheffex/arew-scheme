@@ -60,6 +60,7 @@
 
     (define (pk . args)
       (let ((port (current-output-port)))
+        (display ";; " port)
         (display args port)
         (newline port)
         (car (reverse args))))
