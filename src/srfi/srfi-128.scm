@@ -13,8 +13,6 @@
           (srfi srfi-99)
           (srfi srfi-39))
 
-  (define (exact-integer? x) (and (integer? x) (exact? x)))
-
   (define (error* msg . args)
     (apply error 'comparator msg args))
 
