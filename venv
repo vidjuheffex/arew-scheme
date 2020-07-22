@@ -10,4 +10,5 @@ then
     exec "${@:-$SHELL}"
 else
     echo "You are already in a virtual environment!"
+    exec "${@:-$SHELL}"
 fi
