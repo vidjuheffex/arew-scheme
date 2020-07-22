@@ -1,7 +1,6 @@
 ;; -*- mode: scheme; coding: utf-8 -*-
 ;; Copyright © 2018 Göran Weinholt <goran@weinholt.se>
 ;; SPDX-License-Identifier: (MIT OR BSD-3-Clause OR LicenseRef-LICENSE)
-#!r6rs
 
 (library (srfi srfi-14)
   (export
@@ -37,7 +36,7 @@
     char-set:hex-digit   char-set:blank       char-set:ascii
     char-set:empty       char-set:full)
   (import
-    (scheme base))
+    (scheme base)
     (srfi private include)
     (srfi private let-opt)
     (srfi srfi-14 inversion-list))
