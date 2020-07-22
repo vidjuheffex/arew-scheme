@@ -104,6 +104,7 @@ termbox: local/lib
 	cp submodules/termbox/build/src/libtermbox.so local/lib/
 
 local/bin/scheme:
+	sudo apt install uuid-dev
 	git submodule init
 	git submodule update
 	cd submodules/ChezScheme/ && ./configure --installprefix=../../../local --disable-x11 --disable-curses
