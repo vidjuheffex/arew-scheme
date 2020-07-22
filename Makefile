@@ -128,8 +128,8 @@ profile-clean:
 	mkdir -p profile
 
 check: profile-clean ## run tests using the library test runner
-	./venv scheme --program src/arew.scm check src/check-check.scm
-	./venv scheme --program src/arew.scm check src/
+	./venv scheme -b ./local/lib/csv9.5.3/a6le/petite.boot --program src/arew.scm check src/check-check.scm
+	./venv scheme -b ./local/lib/csv9.5.3/a6le/petite.boot --program src/arew.scm check src/
 
 todo: ## Things that should be done
 	@grep -nR --color=always  --before-context=2  --after-context=2 TODO src/
