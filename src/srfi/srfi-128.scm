@@ -9,10 +9,9 @@
           comparator-hash-function comparator-test-type comparator-check-type
           comparator-hash hash-bound hash-salt =? <? >? <=? >=?
           comparator-if<=>)
-  (import (except (rnrs) define-record-type)
+  (import (except (scheme base) define-record-type)
           (srfi srfi-99)
-          (srfi srfi-39)
-          (only (rnrs r5rs) modulo))
+          (srfi srfi-39))
 
   (define (exact-integer? x) (and (integer? x) (exact? x)))
 
