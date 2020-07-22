@@ -7,7 +7,7 @@
    euclidean/ euclidean-quotient euclidean-remainder
    balanced/ balanced-quotient balanced-remainder)
 
-  (import (rnrs) (rnrs r5rs))
+  (import (scheme base))
 
   ;; -*- Mode: Scheme -*-
 
