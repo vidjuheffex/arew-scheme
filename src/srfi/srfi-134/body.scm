@@ -48,7 +48,9 @@
 ;;; Record
 ;;;
 
-(define-record-type <ideque> (%make-dq lenf f lenr r) ideque?
+(define-record-type <ideque>
+  (%make-dq lenf f lenr r)
+  ideque?
   (lenf dq-lenf)  ; length of front chain
   (f    dq-f)     ; front chain
   (lenr dq-lenr)  ; length of rear chain

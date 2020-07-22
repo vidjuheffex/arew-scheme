@@ -1,5 +1,5 @@
 (define-library (srfi srfi-134)
-  (import (scheme base)
+  (import (except (scheme base) member map for-each assoc list-copy make-list)
           (scheme case-lambda)
           (srfi srfi-1)
           (srfi srfi-158))

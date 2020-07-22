@@ -16,7 +16,7 @@
    char<=? char<? char=? char>=? char>? char? close-input-port
    close-output-port close-port complex? cond cons
    current-error-port current-input-port current-output-port define
-   define-record-type define-syntax define-values denominator do
+   define-syntax define-values denominator do
    dynamic-wind eof-object eof-object? eq? equal? eqv? error
    error-object-irritants error-object-message error-object? even?
    exact exact-integer-sqrt exact-integer? exact? expt
@@ -48,7 +48,7 @@
    vector? when with-exception-handler write-bytevector write-char
    write-string write-u8 zero?
 
-   (rename (define-record-type my:define-record-type ))
+   (rename (my:define-record-type define-record-type))
    )
 
   (import (rename (chezscheme)
