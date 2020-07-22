@@ -23,7 +23,7 @@
     bits
     bitwise-fold bitwise-for-each bitwise-unfold
     make-bitwise-generator)
-  (import (rnrs))
+  (import (except (chezscheme) integer-length))
 
   (define bitwise-eqv
     (case-lambda
