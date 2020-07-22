@@ -5,7 +5,7 @@
           lseq-map lseq-for-each lseq-filter lseq-remove
           lseq-find lseq-find-tail lseq-take-while lseq-drop-while
           lseq-any lseq-every lseq-index lseq-member lseq-memq lseq-memv)
-  (import (rnrs) (rnrs mutable-pairs))
+  (import (chezscheme))
 
   ;; Helper returns #t if any element of list is null or #f if none
   (define (any-null? list)
