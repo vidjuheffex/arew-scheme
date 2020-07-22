@@ -39,4 +39,4 @@
 
           string->utf8 string->utf16 string->utf32
           utf8->string utf16->string utf32->string)
-    (import (rnrs bytevectors)))
+    (import (chezscheme)))
