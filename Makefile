@@ -107,7 +107,7 @@ local/bin/scheme:
 	sudo apt install uuid-dev
 	git submodule init
 	git submodule update
-	cd submodules/ChezScheme/ && ./configure --installprefix=../../../local --disable-x11 --disable-curses --threads
+	cd submodules/ChezScheme/ && ./configure --installprefix=$(PWD)/local --disable-x11 --disable-curses --threads
 	cd submodules/ChezScheme/ && make
 	cd submodules/ChezScheme/ && make install
 
@@ -128,8 +128,8 @@ profile-clean:
 	mkdir -p profile
 
 check: profile-clean ## run tests using the library test runner
-	./venv scheme -b ./local/lib/csv9.5.3/ta6le/petite.boot -b ./local/lib/csv9.5.3/ta6le/scheme.boot --program src/arew.scm check src/check-check.scm
-	./venv scheme -b ./local/lib/csv9.5.3/ta6le/petite.boot -b ./local/lib/csv9.5.3/ta6le/scheme.boot --program src/arew.scm check src/
+	./venv scheme --program src/arew.scm check src/check-check.scm
+	./venv scheme --program src/arew.scm check src/
 
 todo: ## Things that should be done
 	@grep -nR --color=always  --before-context=2  --after-context=2 TODO src/
