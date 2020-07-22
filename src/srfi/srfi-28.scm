@@ -1,6 +1,9 @@
 (library (srfi srfi-28)
   (export format)
-  (import (rnrs) (srfi srfi-6))
+  (import (except (chezscheme)
+                  format
+                  open-input-string)
+          (srfi srfi-6))
 
   ;; reference implementation from srfi :28 documentation
 

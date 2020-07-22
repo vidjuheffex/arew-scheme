@@ -1,4 +1,4 @@
-(library (srfi srfi-158-check)
+(library (srfi srfi-158 check)
   (export
    test-000 test-001 test-002 test-003 test-004 test-005 test-006 test-007 test-008 test-009
    test-010 test-011 test-012 test-013 test-014 test-015 test-016 test-017 test-018 test-019
