@@ -7,3 +7,6 @@
 [submodule "submodules/termbox"]
 	path = submodules/termbox
 	url = https://github.com/nsf/termbox
+[submodule "submodules/ChezScheme"]
+	path = submodules/ChezScheme
+	url = https://github.com/cisco/ChezScheme/

@@ -103,7 +103,16 @@ termbox: local/lib
 	cd submodules/termbox/ && ./waf
 	cp submodules/termbox/build/src/libtermbox.so local/lib/
 
-init: okvslite yxml termbox
+local/bin/scheme:
+	git submodule init
+	git submodule update
+	cd submodules/ChezScheme/ && ./configure --installprefix=../../../local --disable-x11 --disable-curses
+	cd submodules/ChezScheme/ && make
+	cd submodules/ChezScheme/ && make install
+
+chez: local/bin/scheme
+
+init: chez
 
 doc:
 	cat $(SOURCES) > arew-scheme.md
