@@ -1,8 +1,6 @@
 ;; -*- mode: scheme; coding: utf-8 -*-
 ;; Copyright © 2018 Göran Weinholt <goran@weinholt.se>
 ;; SPDX-License-Identifier: (MIT OR BSD-3-Clause OR LicenseRef-LICENSE)
-#!r6rs
-
 (library (srfi srfi-14 inversion-list)
   (export
     inversion-list?
@@ -30,11 +28,8 @@
     inversion-list-cursor-ref
     inversion-list-cursor-next
     inversion-list-cursor-at-end?)
-  (import
-    (except (rnrs) define-record-type)
-    (rnrs r5rs)
-    (srfi srfi-9)
-    (srfi private include))
+  (import (scheme base)
+          (srfi private include))
 
   (define-syntax define-record-discloser
     (syntax-rules ()

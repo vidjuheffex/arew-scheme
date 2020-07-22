@@ -37,10 +37,7 @@
     char-set:hex-digit   char-set:blank       char-set:ascii
     char-set:empty       char-set:full)
   (import
-    (except (rnrs) define-record-type)
-    (rnrs mutable-strings)
-    (rnrs r5rs)
-    (srfi srfi-9)
+    (scheme base))
     (srfi private include)
     (srfi private let-opt)
     (srfi srfi-14 inversion-list))
