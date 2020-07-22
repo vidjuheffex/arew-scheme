@@ -20,7 +20,7 @@
 ;; ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 ;; CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 ;; SOFTWARE.
-(library (srfi srfi-146 hash-check)
+(library (srfi srfi-146 hash check)
   (export check-000 check-001 check-002 check-003 check-004 check-005
 check-006 check-007 check-008 check-009 check-010 check-011 check-012
 check-013 check-014 check-015 check-016 check-017 check-018 check-019
