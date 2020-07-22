@@ -8,12 +8,8 @@
    list-queue-append list-queue-append! list-queue-concatenate
    list-queue-map list-queue-map! list-queue-for-each)
 
-  (import
-   (only (srfi srfi-23) error)
-   (except (rnrs base) error)
-   (rnrs control)
-   (rnrs mutable-pairs)
-   (rnrs records syntactic))
+  (import (scheme base)
+          (scheme case-lambda))
 
   ;; Implementation of list-queue SRFI
   ;;
@@ -43,22 +39,6 @@
   ;; R7RS shims.  Comment these out on an R7RS system.
   ;; [John Cowan] stole this code from Chibi Scheme, which is BSD-licensed.
 
-  (define (make-list n . o)
-    (let ((default (if (pair? o) (car o))))
-      (let lp ((n n) (res '()))
-        (if (<= n 0) res (lp (- n 1) (cons default res))))))
-
-  (define (list-copy ls)
-    (let lp ((ls ls) (res '()))
-      (if (pair? ls)
-          (lp (cdr ls) (cons (car ls) res))
-          (append (reverse res) ls))))
-
-  (define (list-set! ls k x)
-    (cond ((null? ls) (error "invalid list index"))
-          ((zero? k) (set-car! ls x))
-          (else (list-set! (cdr ls) (- k 1) x))))
-
 ;;; This definition is from Chibi's SRFI-1 implementation.
 
   (define (last-pair ls) (if (null? (cdr ls)) ls (last-pair (cdr ls))))
@@ -78,11 +58,11 @@
 ;;; The invariant is that either first is (the first pair of) a list
 ;;; and last is the last pair, or both of them are the empty list.
 
-  (define-record-type
-      (<list-queue> raw-make-list-queue list-queue?)
-    (fields
-     (mutable first get-first set-first!)
-     (mutable last get-last set-last!)))
+  (define-record-type <list-queue>
+    (raw-make-list-queue first last)
+    list-queue?
+    (first get-first set-first!)
+    (last get-last set-last!))
 
 ;;; Constructors
 

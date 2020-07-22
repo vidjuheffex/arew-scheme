@@ -1,4 +1,4 @@
-(library (srfi srfi-117-check)
+(library (srfi srfi-117 check)
 
   (export check-000 check-001 check-002 check-003 check-004 check-005
 check-006 check-007 check-008 check-009 check-010 check-011 #;check-012
