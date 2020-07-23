@@ -405,6 +405,7 @@
     (call-with-values (lambda () (read-library name))
       (lambda (exports imports body)
         `($module ,(rename name) ()
+                  ($implicit-exports #t)
                   ($import ,@(map import-rename imports))
                   ,@body
                   ($export ,@exports)))))
