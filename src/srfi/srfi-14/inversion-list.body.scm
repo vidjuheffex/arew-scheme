@@ -12,7 +12,7 @@
 ; This was written as support code for the implementation of SRFI 14,
 ; which is why there's so many exports here nobody really needs.
 
-(define-record-type inversion-list :inversion-list
+(define-record-type :inversion-list
   (make-inversion-list min max
 		       range-vector)
   inversion-list?
@@ -25,12 +25,6 @@
   ;; [ (vector-ref v i) (vector-ref v (+ 1 i)) )
   ;; (except the last one, possibly)
   (range-vector inversion-list-range-vector))
-
-(define-record-discloser :inversion-list
-  (lambda (r)
-    (list 'inversion-list
-	  (inversion-list-min r) (inversion-list-max r)
-	  (inversion-list-range-vector r))))
 
 (define (make-empty-inversion-list min max)
   (make-inversion-list min max '#()))
@@ -299,7 +293,7 @@
 
 ; It never ends with Olin
 
-(define-record-type inversion-list-cursor :inversion-list-cursor
+(define-record-type :inversion-list-cursor
   (make-inversion-list-cursor index number)
   inversion-list-cursor?
   ;; index into the range vector (always even), #f if we're at the end
@@ -352,19 +346,3 @@
 		  (bitwise-and mask
 			       (+ (* 37 ans)
 				  (vector-ref range-vector i)))))))))
-
-;; Utilities
-
-(define (vector-copy! source source-start dest dest-start count)
-  (let loop ((i 0))
-    (if (< i count)
-	(begin
-	  (vector-set! dest (+ dest-start i)
-		       (vector-ref source (+ source-start i)))
-	  (loop (+ 1 i))))))
-
-(define (vector-copy v)
-  (let* ((size (vector-length v))
-	 (copy (make-vector size)))
-    (vector-copy! v 0 copy 0 size)
-    copy))

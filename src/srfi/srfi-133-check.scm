@@ -17,8 +17,8 @@ check-090 check-091 check-092 check-093 check-094 check-095 check-096
 check-097 check-098 check-099 check-100 check-101 check-102 check-103
 check-104)
 
-  (import (except (scheme base) string->vector vector->string
-                  list->vector vector->list vector-copy! vector-fill! vector-map
+  (import (except (scheme base) string->vector vector-copy! vector->string
+                  list->vector vector->list vector-fill! vector-map
                   vector-append vector-copy)
           (srfi srfi-133)
           (check))

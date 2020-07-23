@@ -1,6 +1,6 @@
 ;; This is a regression testing suite for the SRFI-14 char-set
 ;; library.  Olin Shivers
-(define-library (srfi srfi-14 check)
+(library (srfi srfi-14 check)
   (export check-00
           check-01
           check-02

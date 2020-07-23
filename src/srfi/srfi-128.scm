@@ -10,8 +10,11 @@
           comparator-hash hash-bound hash-salt =? <? >? <=? >=?
           comparator-if<=>)
   (import (except (scheme base) define-record-type)
+          (only (chezscheme) nan? infinite? real-part imag-part equal-hash string-hash symbol-hash string-ci-hash)
+          (scheme case-lambda)
           (srfi srfi-99)
-          (srfi srfi-39))
+          (srfi srfi-39)
+          (scheme char))
 
   (define (error* msg . args)
     (apply error 'comparator msg args))

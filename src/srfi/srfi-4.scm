@@ -29,7 +29,7 @@
 
     f64vector? make-f64vector f64vector f64vector-length f64vector-ref
     f64vector-set! f64vector->list list->f64vector)
-  (import (chezscheme) (srfi srfi-28))
+  (import (except (chezscheme) format) (srfi srfi-28))
 
   (define-syntax define-integer-vector
     (lambda (x)

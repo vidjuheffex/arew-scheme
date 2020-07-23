@@ -43,7 +43,7 @@
    symbol=? symbol? syntax-error syntax-rules textual-port? truncate
    truncate-quotient truncate-remainder truncate/ u8-ready? unless
    unquote unquote-splicing utf8->string values vector vector->list
-   vector->string vector-append vector-copy #;vector-copy! vector-fill!
+   vector->string vector-append vector-copy vector-copy! vector-fill!
    vector-for-each vector-length vector-map vector-ref vector-set!
    vector? when with-exception-handler write-bytevector write-char
    write-string write-u8 zero?
@@ -54,7 +54,9 @@
   (import (rename (chezscheme)
                   (error cs:error)
                   (bytevector-copy cs:bytevector-copy)
-                  (bytevector-copy! cs:bytevector-copy!)))
+                  (bytevector-copy! cs:bytevector-copy!)
+                  (vector->list cs:vector->list))
+          (only (srfi srfi-43) vector-copy!))
 
   (begin
 
@@ -203,6 +205,8 @@
 
     (define (square x) (* x x))
 
+    (define (%substring1 str start) (substring str start (string-length str)))
+
     (define string->vector
       (case-lambda
         ((str) (list->vector (string->list str)))
@@ -235,6 +239,12 @@
 
     (define (%subvector1 v start) (%subvector v start (vector-length v)))
 
+    (define vector->list
+      (case-lambda
+        ((v) (cs:vector->list v))
+        ((v start) (cs:vector->list (%subvector1 v start)))
+        ((v start end) (cs:vector->list (%subvector v start end)))))
+
     (define vector->string
       (case-lambda
         ((v) (list->string (vector->list v)))
@@ -242,7 +252,7 @@
         ((v start end) (vector->string (%subvector v start end)))))
 
     (define (vector-append . lis)
-      (list->vector (apply append (map r6:vector->list lis))))
+      (list->vector (apply append (map cs:vector->list lis))))
 
     (define write-bytevector
       (case-lambda

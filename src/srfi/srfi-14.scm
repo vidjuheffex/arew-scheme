@@ -36,10 +36,19 @@
     char-set:hex-digit   char-set:blank       char-set:ascii
     char-set:empty       char-set:full)
   (import
-    (scheme base)
-    (srfi private include)
-    (srfi private let-opt)
-    (srfi srfi-14 inversion-list))
+   (scheme base)
+   (only (chezscheme)
+         assertion-violation
+         bitwise-and
+         syntax-case
+         syntax
+         with-syntax
+         identifier?
+         bytevector=?)
+   (only (srfi srfi-43) vector-copy!)
+   (srfi private include)
+   (srfi private let-opt)
+   (srfi srfi-14 inversion-list))
 
   (define (partition-list pred lis)
     (let recur ((lis lis))

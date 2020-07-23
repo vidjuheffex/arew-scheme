@@ -29,18 +29,8 @@
    inversion-list-cursor-next
    inversion-list-cursor-at-end?)
   (import (scheme base)
-          (srfi private include))
+          (only (chezscheme) bitwise-and)
+          (srfi private include)
+          (only (chezscheme) assertion-violation))
 
-  (define-syntax define-record-discloser
-    (syntax-rules ()
-      ((_ type discloser)
-       (define dummy #f))))
-
-  (let-syntax ((define-record-type
-                 (lambda (x)
-                   (syntax-case x ()
-                     ((_ tag typename (constructor field-init* ...) etc ...)
-                      #'(define-record-type typename
-                          (constructor field-init* ...) etc ...))))))
-
-    (include/resolve ("srfi" "srfi-14") "inversion-list.body.scm")))
+  (include/resolve ("srfi" "srfi-14") "inversion-list.body.scm"))

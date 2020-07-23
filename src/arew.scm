@@ -3,6 +3,10 @@
 (import (prefix (rnrs) r6:))
 (import (arew matchable))
 
+(define (pk . args)
+  (display args (current-error-port))
+  (car (reverse args)))
+
 (define (error message . irritants)
   (if (and (symbol? message) (pair? irritants) (string? (car irritants)))
       (apply cs:error message irritants)
@@ -569,7 +573,7 @@
   (define sorted-check-libraries* (remove (lambda (x) (equal? x '(check)))
                                           sorted-check-libraries))
 
-  (define program (make-check-program sorted-check-libraries*))
+  (define program (values (make-check-program sorted-check-libraries*)))
 
   (unless (null? sorted-check-libraries*)
     (parameterize ([compile-profile 'source])

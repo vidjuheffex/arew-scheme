@@ -1,10 +1,4 @@
-(define-library (arew data finger-tree check)
-  (import
-   (arew data finger-tree)
-   (scheme generator)
-   (scheme base)
-   (scheme list)
-   (check))
+(library (arew data finger-tree check)
 
   (export check-000 check-001 check-002 check-003 check-004 check-005
           check-006 check-007 check-008 check-009 check-010 check-011 check-012
@@ -44,6 +38,13 @@
           check-generators check-239 check-240 check-241 check-242 check-243
           check-244 check-245 check-246 check-247 check-248 check-249 check-250
           check-251 check-252 check-253 check-254)
+
+  (import
+   (arew data finger-tree)
+   (scheme generator)
+   (scheme base)
+   (except (scheme list) map member assoc for-each list-copy make-list)
+   (check))
 
   (begin
 

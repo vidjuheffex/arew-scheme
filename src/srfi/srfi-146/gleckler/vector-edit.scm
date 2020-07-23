@@ -29,7 +29,7 @@
 ;;; calculations itself.
 (library (srfi srfi-146 gleckler vector-edit)
   (export vector-edit vector-replace-one vector-without)
-    (import (scheme base))
+  (import (scheme base))
 
 
   (define (vector-without v start end)

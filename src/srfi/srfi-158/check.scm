@@ -11,7 +11,7 @@
 
   (import (scheme base)
           (check)
-          (srfi srfi-1)
+          (except (srfi srfi-1) assoc for-each list-copy make-list map member)
           (srfi srfi-4)
           (srfi srfi-158))
 
