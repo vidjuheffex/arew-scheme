@@ -6,7 +6,7 @@ R7RS. It is built on top of Chez Scheme.  You can buy the
 **work-in-progress** [Arew Scheme book at
 leanpub](https://leanpub.com/arew-scheme-book/).
 
-[![people walking in a library](https://raw.githubusercontent.com/arew-scheme/arew-scheme/master/gabriel-sollmann-Y7d265_7i08-unsplash.jpg)](https://github.com/arew-scheme/arew-scheme)
+[![people walking in a library](https://raw.githubusercontent.com/arew-scheme/arew-scheme/main/gabriel-sollmann-Y7d265_7i08-unsplash.jpg)](https://github.com/arew-scheme/arew-scheme)
 
 ## I need help
 
