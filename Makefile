@@ -103,7 +103,15 @@ termbox: local/lib
 	cd submodules/termbox/ && ./waf
 	cp submodules/termbox/build/src/libtermbox.so local/lib/
 
-init: okvslite yxml termbox
+chez:
+	mkdir -p local/src
+	sudo apt install uuid-dev
+	cd local/src && git clone --recursive --depth=1 https://github.com/cisco/ChezScheme/
+	cd local/src/ChezScheme/ && ./configure --disable-x11 --disable-curses --threads
+	cd local/src/ChezScheme/ && make
+	cd local/src/ChezScheme/ && sudo make install
+
+init: chez
 
 doc:
 	cat $(SOURCES) > arew-scheme.md
