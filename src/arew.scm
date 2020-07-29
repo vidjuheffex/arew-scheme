@@ -409,7 +409,7 @@ int run_program(int argc, const char **argv, const char *bootfilename, const cha
 
   ;; shared
 
-  (define temporary-directory (make-temporary-directory "arew-compile"))
+  (define temporary-directory (make-temporary-directory "/tmp/arew-compile"))
 
 
   (call-with-output-file (string-append temporary-directory "/stubs.c")
