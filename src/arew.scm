@@ -123,148 +123,12 @@
     ((chezscheme rnrs) #t)
     (else #f)))
 
-(define (pack filename-or-obj)
-
-  (define (maybe-annotation-expression obj)
-    (if (annotation? obj)
-        (annotation-expression obj)
-        obj))
-
-  (define (and=> v proc)
-    (if v (proc v) #f))
-
-  (define unique-var
-    (let ((count 0))
-      (lambda (name)
-        (let ([count* count])
-          (set! count (+ count 1))
-          (string->symbol
-           (string-append (symbol->string name) "." (number->string count*)))))))
-
-  (define (memoize proc)
-    (let ((memory '()))
-      (lambda (name)
-        (or (and=> (assoc name memory) cdr)
-            (let ((new-name (proc name)))
-              (set! memory (cons (cons name new-name)
-                                 memory))
-              new-name)))))
-
-  (define rename
-    (memoize
-     (lambda (name)
-       (case (car name)
-         ((chezscheme rnrs) name)
-         (else (list (unique-var 'library)))))))
-
-  (define (import-rename spec)
-    (let ((spec (maybe-annotation-expression spec)))
-      (case (maybe-annotation-expression (car spec))
-        ((prefix rename for except only)
-         (cons* (car spec) (import-rename (cadr spec)) (cddr spec)))
-        (else (rename (map maybe-annotation-expression spec))))))
-
-  (define (library-filepath name)
-    (let ((name* (string-join (map symbol->string name) "/")))
-      (let loop ((extensions %arew-library-extensions))
-        (if (null? extensions)
-            (error "Library not found" name)
-            (guard (ex (else (loop (cdr extensions))))
-              (find-file (string-append name* (car extensions))))))))
-
-  (define (read-program sexp)
-    (let loop ((imports '())
-               (sexp sexp))
-      (if (null? sexp)
-          (values '() imports)
-          (let ((head (car sexp)))
-            (if (and (pair? (maybe-annotation-expression head))
-                     (eq? (maybe-annotation-expression (car (maybe-annotation-expression head)))
-                          'import))
-                (loop (append (cdr (maybe-annotation-expression head)) imports) (cdr sexp))
-                (values (reverse imports) sexp))))))
-
-  (define (read-library name)
-    (let ((sexp (car (read-filename (library-filepath name)))))
-      (let loop ((body (cddr (maybe-annotation-expression sexp)))
-                 (exports '())
-                 (imports '()))
-        (if (null? body)
-            (values (reverse exports) (reverse imports) '())
-            (let ((head (maybe-annotation-expression (car body))))
-              (case (maybe-annotation-expression (car head))
-                ((export) (loop (cdr body) (append (cdr head) exports) imports))
-                ((import) (loop (cdr body) exports (append (cdr head) imports)))
-                (else (values (reverse exports) (reverse imports) body))))))))
-
-  (define (import->name spec)
-    (let ((spec (annotations->datum spec)))
-      (case (car spec)
-        ((rename only prefix except for) (import->name (cadr spec)))
-        (else spec))))
-
-  (define (library-imports name)
-    (if (primitive-import? name)
-        '()
-        (call-with-values (lambda () (read-library name))
-          (lambda (exports imports body)
-            (map import->name imports)))))
-
-  (define (make-dependencies imports)
-    (let loop ((imports imports)
-               (out '()))
-      (if (null? imports)
-          out
-          (if (assoc (car imports) out)
-              (loop (cdr imports) out)
-              (let ((imports* (library-imports (car imports))))
-                (loop (append (cdr imports) imports*)
-                      (cons (cons (car imports) imports*)
-                            out)))))))
-
-  (define (libraries-pack name)
-    (call-with-values (lambda () (read-library name))
-      (lambda (exports imports body)
-        `($library ,(rename name)
-                   (export ,@exports)
-                   (import ,@(map import-rename imports))
-                   ,@body))))
-
-
-  (define (maybe-read-program filename-or-obj)
-    (if (string? filename-or-obj)
-        (read-program (read-filename filename-or-obj))
-        (read-program filename-or-obj)))
-
-  (call-with-values (lambda () (maybe-read-program filename-or-obj))
-    (lambda (imports body)
-      (when (null? imports)
-        (error "No imports" filename-or-obj))
-      (when (null? body)
-        (error "No expression" filename-or-obj))
-
-      (let* ((imports* (map import->name imports))
-             (dependencies (make-dependencies imports*))
-             (libraries (remove primitive-import? (topological-sort dependencies))))
-
-        `($begin
-          ,@(map libraries-pack libraries)
-          ($import ,@(map import-rename imports))
-          ,@body)))))
-
-(define (print filename)
-  (pretty-print (annotations->datum (pack filename))))
-
 (define (eval* obj)
   (let ((env (copy-environment (environment '(only (chezscheme) import)) #t)))
     (let loop ((program (if (pair? obj) obj (read-filename obj))))
       (unless (null? program)
         (eval (car program) env)
         (loop (cdr program))))))
-
-(define (expand* filename)
-  (let ((env (copy-environment (environment '(prefix (arew r7rs) $)))))
-    (pretty-print (expand (pack filename) env))))
 
 (define (check path)
 
@@ -407,7 +271,5 @@
 (match (cdr (command-line))
 ;;  (("editor" filename) (editor filename))
   (("eval" filename) (eval* filename))
-  (("expand" filename) (expand* filename))
-  (("print" filename) (print filename))
   (("check" filename) (check filename))
   (else (display "unknown subcommand.\n")))
