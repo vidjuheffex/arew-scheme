@@ -1,8 +1,4 @@
-(define-library (srfi srfi-134)
-  (import (scheme base)
-          (scheme case-lambda)
-          (srfi srfi-1)
-          (srfi srfi-158))
+(library (srfi srfi-134)
   (export ideque ideque-tabulate ideque-unfold ideque-unfold-right
           ideque? ideque-empty? ideque= ideque-any ideque-every
 
@@ -31,4 +27,10 @@
           list->ideque ideque->list
           generator->ideque ideque->generator
           )
+
+  (import (scheme base)
+          (scheme case-lambda)
+          (srfi srfi-1)
+          (srfi srfi-158))
+
   (include "srfi/srfi-134/body.scm"))

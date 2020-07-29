@@ -1,4 +1,4 @@
-(define-library (arew data base foundationdb untangle)
+(library (arew data base foundationdb untangle)
 
   (export make-fdb
           fdb-close

@@ -1,4 +1,4 @@
-(define-library (scheme fixnum)
+(library (scheme fixnum)
 
   (export
     fx-width fx-greatest fx-least

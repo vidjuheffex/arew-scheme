@@ -1,4 +1,4 @@
-(define-library (scheme division)
+(library (scheme division)
   (export
    ceiling/ ceiling-quotient ceiling-remainder
    floor/ floor-quotient floor-remainder

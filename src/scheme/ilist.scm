@@ -1,30 +1,22 @@
-(define-library (scheme ilist)
+(library (scheme ilist)
 
-  (export iq)
-  (export ipair ilist xipair ipair* make-ilist ilist-copy ilist-tabulate iiota)
-  (export ipair?)
-  (export proper-ilist? ilist? dotted-ilist? not-ipair? null-ilist? ilist=)
-  (export icar icdr ilist-ref)
-  (export ifirst isecond ithird ifourth ififth isixth iseventh ieighth ininth itenth)
-  (export icaar icadr icdar icddr)
-  (export icaaar icaadr icadar icaddr icdaar icdadr icddar icdddr)
-  (export icaaaar icaaadr icaadar icaaddr icadaar icadadr icaddar icadddr)
-  (export icdaaar icdaadr icdadar icdaddr icddaar icddadr icdddar icddddr)
-  (export icar+icdr itake idrop ilist-tail)
-  (export itake-right idrop-right isplit-at ilast last-ipair)
-  (export ilength iappend iconcatenate ireverse iappend-reverse)
-  (export izip iunzip1 iunzip2 iunzip3 iunzip4 iunzip5)
-  (export icount imap ifor-each ifold iunfold ipair-fold ireduce )
-  (export ifold-right iunfold-right ipair-fold-right ireduce-right )
-  (export iappend-map ipair-for-each ifilter-map imap-in-order)
-  (export ifilter ipartition iremove imember imemq imemv)
-  (export ifind ifind-tail iany ievery)
-  (export ilist-index itake-while idrop-while ispan ibreak)
-  (export idelete idelete-duplicates )
-  (export iassoc iassq iassv ialist-cons ialist-delete)
-  (export replace-icar replace-icdr)
-  (export pair->ipair ipair->pair list->ilist ilist->list)
-  (export tree->itree itree->tree gtree->itree gtree->tree)
-  (export iapply)
+  (export iq ipair ilist xipair ipair* make-ilist ilist-copy
+ilist-tabulate iiota ipair?  proper-ilist? ilist? dotted-ilist?
+not-ipair? null-ilist? ilist= icar icdr ilist-ref ifirst isecond
+ithird ifourth ififth isixth iseventh ieighth ininth itenth icaar
+icadr icdar icddr icaaar icaadr icadar icaddr icdaar icdadr icddar
+icdddr icaaaar icaaadr icaadar icaaddr icadaar icadadr icaddar icadddr
+icdaaar icdaadr icdadar icdaddr icddaar icddadr icdddar icddddr
+icar+icdr itake idrop ilist-tail itake-right idrop-right isplit-at
+ilast last-ipair ilength iappend iconcatenate ireverse iappend-reverse
+izip iunzip1 iunzip2 iunzip3 iunzip4 iunzip5 icount imap ifor-each
+ifold iunfold ipair-fold ireduce ifold-right iunfold-right
+ipair-fold-right ireduce-right iappend-map ipair-for-each ifilter-map
+imap-in-order ifilter ipartition iremove imember imemq imemv ifind
+ifind-tail iany ievery ilist-index itake-while idrop-while ispan
+ibreak idelete idelete-duplicates iassoc iassq iassv ialist-cons
+ialist-delete replace-icar replace-icdr pair->ipair ipair->pair
+list->ilist ilist->list tree->itree itree->tree gtree->itree
+gtree->tree iapply)
 
   (import (srfi srfi-116)))

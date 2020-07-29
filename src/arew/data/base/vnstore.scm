@@ -1,37 +1,23 @@
-(define-library (arew data base fstore)
+(library (arew data base fstore)
 
-  (export fstore)
-  (export fstore-branch-create)
-  (export fstore-branch-create-orphan)
-  (export fstore-branch-create-orphan-with-snapshot)
-  (export fstore-branch-ref)
-  (export fstore-branch-change-id-ref)
-  (export fstore-merge-with-source-of-truth)
-  (export fstore-ask?)
-  (export fstore-add)
-  (export fstore-delete)
-  (export fstore-var)
-  (export fstore-var?)
-  (export fstore-var-name)
-  (export fstore-from)
-  (export fstore-where)
-  (export fstore-select)
+  (export fstore fstore-branch-create fstore-branch-create-orphan
+fstore-branch-create-orphan-with-snapshot fstore-branch-ref
+fstore-branch-change-id-ref fstore-merge-with-source-of-truth
+fstore-ask?  fstore-add fstore-delete fstore-var fstore-var?
+fstore-var-name fstore-from fstore-where fstore-select)
 
-  (import (only (chezscheme) assert))
-
-  (import (scheme base))
-  (import (scheme case-lambda))
-  (import (only (scheme list) drop iota reverse!))
-  (import (scheme comparator))
-  (import (scheme generator))
-  (import (scheme hash-table))
-  (import (scheme mapping hash))
-
-  (import (cffi wiredtiger okvs))
-  (import (arew data pack))
-  (import (arew data base nstore))
-
-  (import (uuid))
+  (import (only (chezscheme) assert)
+          (scheme base)
+          (scheme case-lambda)
+          (only (scheme list) drop iota reverse!)
+          (scheme comparator)
+          (scheme generator)
+          (scheme hash-table)
+          (scheme mapping hash)
+          (cffi wiredtiger okvs)
+          (arew data pack)
+          (arew data base nstore)
+          (uuid))
 
   (begin
 

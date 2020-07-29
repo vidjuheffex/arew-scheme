@@ -1,75 +1,16 @@
 ;; This is a regression testing suite for the SRFI-14 char-set
 ;; library.  Olin Shivers
-(define-library (srfi srfi-14 check)
-  (export check-00
-          check-01
-          check-02
-          check-03
-          check-04
-          check-05
-          check-06
-          check-07
-          check-08
-          check-09
-          check-10
-          check-11
-          check-12
-          check-13
-          check-14
-          check-15
-          check-16
-          check-17
-          check-18
-          check-19
-          check-20
-          check-21
-          check-22
-          check-23
-          check-24
-          check-25
-          check-26
-          check-27
-          check-28
-          check-29
-          check-30
-          check-31
-          check-32
-          check-33
-          check-34
-          check-35
-          check-36
-          check-37
-          check-38
-          check-39
-          check-40
-          check-41
-          check-42
-          check-43
-          check-44
-          check-45
-          check-46
-          check-47
-          check-49
-          check-50
-          check-51
-          check-52
-          check-53
-          check-54
-          check-55
-          check-56
-          check-57
-          check-58
-          check-59
-          check-60
-          check-61
-          check-62
-          check-63
-          check-64
-          check-65
-          check-66
-          check-67
-          check-68
-          )
+(library (srfi srfi-14 check)
+  (export check-00 check-01 check-02 check-03 check-04 check-05
+check-06 check-07 check-08 check-09 check-10 check-11 check-12
+check-13 check-14 check-15 check-16 check-17 check-18 check-19
+check-20 check-21 check-22 check-23 check-24 check-25 check-26
+check-27 check-28 check-29 check-30 check-31 check-32 check-33
+check-34 check-35 check-36 check-37 check-38 check-39 check-40
+check-41 check-42 check-43 check-44 check-45 check-46 check-47
+check-49 check-50 check-51 check-52 check-53 check-54 check-55
+check-56 check-57 check-58 check-59 check-60 check-61 check-62
+check-63 check-64 check-65 check-66 check-67 check-68 )
   (import (scheme base)
           (scheme char)
           (check)

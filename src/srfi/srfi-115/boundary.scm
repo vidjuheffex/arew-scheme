@@ -6,9 +6,9 @@
 ;;> \hyperlink["http://unicode.org/reports/tr29/"]{TR29} word
 ;;> boundaries.
 
-(define-library (srfi srfi-115 boundary)
-  (import (scheme base))
-  (import (scheme charset))
+(library (srfi srfi-115 boundary)
+  (import (scheme base)
+          (scheme charset))
   (export char-set:regional-indicator
           char-set:extend-or-spacing-mark
           char-set:hangul-l

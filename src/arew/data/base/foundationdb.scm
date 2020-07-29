@@ -8,7 +8,7 @@
 ;;
 ;; - 2020/02: port to arew
 ;;
-(define-library (arew data base foundationdb)
+(library (arew data base foundationdb)
 
   (export
    fdb-error

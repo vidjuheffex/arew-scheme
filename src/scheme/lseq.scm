@@ -1,4 +1,4 @@
-(define-library (scheme lseq)
+(library (scheme lseq)
 
   (export generator->lseq lseq? lseq=?
           lseq-car lseq-first lseq-cdr lseq-rest lseq-ref lseq-take lseq-drop

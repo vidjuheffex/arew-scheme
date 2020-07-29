@@ -1,11 +1,4 @@
-(define-library (arew data finger-tree)
-  (import
-   (scheme generator)
-   (scheme base)
-   (scheme case-lambda)
-   (scheme cxr)
-   (scheme lazy)
-   (scheme list))
+(library (arew data finger-tree)
 
   (export
    make-finger-tree
@@ -34,5 +27,14 @@
    finger-tree->generator
    finger-tree->reverse-generator
    finger-tree->list)
+
+  (import
+   (scheme generator)
+   (scheme base)
+   (scheme case-lambda)
+   (scheme cxr)
+   (scheme lazy)
+   (scheme list))
+
 
   (include "arew/data/finger-tree/body.scm"))

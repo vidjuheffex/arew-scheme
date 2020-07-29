@@ -1,4 +1,4 @@
-(define-library (srfi 115)
+(library (srfi 115)
   (export regexp regexp? valid-sre? rx regexp->sre char-set->sre
           regexp-matches regexp-matches? regexp-search
           regexp-replace regexp-replace-all regexp-match->list

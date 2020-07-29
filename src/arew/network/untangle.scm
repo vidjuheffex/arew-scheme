@@ -1,5 +1,5 @@
 #!chezscheme
-(define-library (arew network untangle)
+(library (arew network untangle)
 
   (export untangle
           spawn

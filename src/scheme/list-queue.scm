@@ -1,4 +1,4 @@
-(define-library (scheme ilist)
+(library (scheme ilist)
 
   (export
    make-list-queue list-queue list-queue-copy list-queue-unfold list-queue-unfold-right
