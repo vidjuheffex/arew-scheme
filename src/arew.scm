@@ -25,6 +25,8 @@
               compile-imported-libraries
               generate-wpo-files
               compile-program
+              load-shared-object
+              foreign-procedure
               compile-whole-program))
 
 (import (scheme base))
@@ -395,54 +397,76 @@ int run_program(int argc, const char **argv, const char *bootfilename, const cha
           (format port "const uint8_t ~a[] = {~{0x~x,~}};~n" symbol-name data)
           (format port "const unsigned int ~a_size = sizeof(~a);~n" symbol-name symbol-name)))))
 
-  (define (expand* obj)
-    (let ((env (copy-environment (environment '(prefix (arew r7rs) $)))))
-      (expand obj env)))
+
+  (define stdlib (load-shared-object #f))
+
+  (define %mkdtemp
+    (foreign-procedure "mkdtemp" (string) string))
+
+  (define (make-temporary-directory prefix)
+    (let ((input (string-append prefix "-XXXXXX")))
+      (%mkdtemp input)))
 
   ;; shared
 
-  (call-with-output-file "/tmp/test/stubs.c"
+  (define temporary-directory (make-temporary-directory "arew-compile"))
+
+
+  (call-with-output-file (string-append temporary-directory "/stubs.c")
     (lambda (port)
       (display stubs port)))
 
-  (call-with-output-file "/tmp/test/embed.c"
+  (call-with-output-file (string-append temporary-directory "/embed.c")
     (lambda (port)
       (display embed port)))
 
-  (call-with-output-file "/tmp/test/setup.c"
+  (call-with-output-file (string-append temporary-directory "/setup.c")
     (lambda (port)
       (display setup port)))
 
-  (call-with-output-file "/tmp/test/base-boot.scm"
+  (call-with-output-file (string-append temporary-directory "/base-boot.scm")
     (lambda (port)
       (write base-boot port)))
 
-  (system "cc -c -o /tmp/test/stubs.o /tmp/test/stubs.c")
+  (system (format #f "cc -c -o ~a/stubs.o ~a/stubs.c"
+                  temporary-directory
+                  temporary-directory))
 
-  (system "cc -c -o /tmp/test/embed.o /tmp/test/embed.c -I/usr/lib/csv9.5.3/ta6le/ -m64")
+  (system (format #f "cc -c -o ~a/embed.o ~a/embed.c -I/usr/lib/csv9.5.3/ta6le/ -m64"
+                  temporary-directory
+                  temporary-directory))
 
-  (system "cc -c -o /tmp/test/setup.o /tmp/test/setup.c -I/usr/lib/csv9.5.3/ta6le/ -m64")
+  (system (format #f "cc -c -o ~a/setup.o ~a/setup.c -I/usr/lib/csv9.5.3/ta6le/ -m64"
+                  temporary-directory
+                  temporary-directory))
 
-  (make-boot-file "/tmp/test/program.boot"
+  (make-boot-file (string-append temporary-directory "/program.boot")
                   '()
                   "/usr/lib/csv9.5.3/ta6le/scheme.boot"
-                  "/tmp/test/base-boot.scm")
+                  (string-append temporary-directory "/base-boot.scm"))
 
-  (call-with-output-file "/tmp/test/program.c"
+  (call-with-output-file (string-append temporary-directory "/program.c")
     (lambda (port)
       (let ((data (bytevector->u8-list
-                   (get-bytevector-all (open-file-input-port "/tmp/test/program.boot")))))
+                   (get-bytevector-all (open-file-input-port (string-append temporary-directory "/program.boot"))))))
         (format port "#include <stdint.h>~n")
         (format port "const uint8_t ~a[] = {~{0x~x,~}};~n" "chezschemebootfile" data)
         (format port "const unsigned int ~a_size = sizeof(~a);~n" "chezschemebootfile" "chezschemebootfile"))))
 
-  (system "cc -c -o /tmp/test/program.o /tmp/test/program.c -m64")
+  (system (format #f "cc -c -o ~a/program.o ~a/program.c -m64"
+                  temporary-directory
+                  temporary-directory))
 
-  (system "ar rcs /tmp/test/boot.a /tmp/test/embed.o /tmp/test/setup.o /tmp/test/stubs.o /tmp/test/program.o /usr/lib/csv9.5.3/ta6le//kernel.o")
+  (system (format #f "ar rcs ~a/boot.a ~a/embed.o ~a/setup.o ~a/stubs.o ~a/program.o /usr/lib/csv9.5.3/ta6le/kernel.o"
+                  temporary-directory
+                  temporary-directory
+                  temporary-directory
+                  temporary-directory
+                  temporary-directory))
 
   ;; specific
 
-  (call-with-output-file "/tmp/test/program.scm"
+  (call-with-output-file (string-append temporary-directory "/program.scm")
     (lambda (port)
       (write '(import (only (chezscheme) import)) port)
       (newline port)
@@ -454,10 +478,16 @@ int run_program(int argc, const char **argv, const char *bootfilename, const cha
   (compile-imported-libraries #t)
   (generate-wpo-files #t)
 
-  (compile-program "/tmp/test/program.scm")
-  (compile-whole-program "/tmp/test/program.wpo" "/tmp/test/program.chez" #t)
-  (build-included-binary-file "/tmp/test/program.chez" "/tmp/test/program.chez.c" "scheme_program")
-  (system "cc -o example /tmp/test/boot.a /tmp/test/program.chez.c -m64 -ldl -lm -luuid -lpthread"))
+  (compile-program (string-append temporary-directory "/program.scm"))
+  (compile-whole-program (string-append temporary-directory "/program.wpo")
+                         (string-append temporary-directory "/program.chez")
+                         #t)
+
+  (build-included-binary-file (string-append temporary-directory "/program.chez") (string-append temporary-directory "/program.chez.c") "scheme_program")
+
+  (system (format #f "cc -o a.out ~a/boot.a ~a/program.chez.c -m64 -ldl -lm -luuid -lpthread"
+                  temporary-directory
+                  temporary-directory)))
 
 (match (cdr (command-line))
 ;;  (("editor" filename) (editor filename))
