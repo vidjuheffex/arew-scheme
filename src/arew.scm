@@ -32,6 +32,17 @@
 
 ;; helpers
 
+(define (read-filename filename)
+  (define port (open-file-input-port filename))
+  (define sfd (make-source-file-descriptor filename port))
+  (define source (open-source-file sfd))
+  (let loop ((out '()))
+    (call-with-values (lambda () (get-datum/annotations source sfd 0))
+      (lambda (object _)
+        (if (eof-object? object)
+            (reverse out)
+            (loop (cons object out)))))))
+
 (define (topological-sort dependencies)
 
   (define (remove-self-dependency pair)
@@ -153,17 +164,6 @@
          (cons* (car spec) (import-rename (cadr spec)) (cddr spec)))
         (else (rename (map maybe-annotation-expression spec))))))
 
-  (define (read-filename filename)
-    (define port (open-file-input-port filename))
-    (define sfd (make-source-file-descriptor filename port))
-    (define source (open-source-file sfd))
-    (let loop ((out '()))
-      (call-with-values (lambda () (get-datum/annotations source sfd 0))
-        (lambda (object _)
-          (if (eof-object? object)
-              (reverse out)
-              (loop (cons object out)))))))
-
   (define (library-filepath name)
     (let ((name* (string-join (map symbol->string name) "/")))
       (let loop ((extensions %arew-library-extensions))
@@ -256,8 +256,11 @@
   (pretty-print (annotations->datum (pack filename))))
 
 (define (eval* obj)
-  (let ((env (copy-environment (environment '(prefix (arew r7rs) $)))))
-    (eval (pack obj) env)))
+  (let ((env (copy-environment (environment '(only (chezscheme) import)) #t)))
+    (let loop ((program (if (pair? obj) obj (read-filename obj))))
+      (unless (null? program)
+        (eval (car program) env)
+        (loop (cdr program))))))
 
 (define (expand* filename)
   (let ((env (copy-environment (environment '(prefix (arew r7rs) $)))))
