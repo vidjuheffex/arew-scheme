@@ -11,8 +11,8 @@
    tb-hide-cursor
    tb-poll-event
    tb-select-output-mode
-   tb-event-type
 
+   tb-event-type
    tb-event-char
    tb-event-key-mod
    tb-event-key-key
